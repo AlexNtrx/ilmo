@@ -5,14 +5,14 @@
 | Field | Actual state |
 | --- | --- |
 | Current phase | Phase 8 — Database implementation |
-| Current authorized work item | DB-01 — Enums and Location |
+| Current authorized work item | DB-02 — IssueCategory |
 | Work-item status | Implemented and validated; awaiting `Approve implementation` |
-| Active Git branch | `feature/db-01-enums-location` |
-| Starting commit | `d80255c` |
+| Active Git branch | `feature/db-02-issue-category` |
+| Starting commit | `0520ddb` |
 | Plan approval | Approved |
 | Implementation approval | Pending |
-| Next implementation phase | Phase 8 continues after DB-01 approval |
-| Next authorized implementation work item | None until DB-01 approval, commit, and `Next slice` |
+| Next implementation phase | Phase 8 continues after DB-02 approval |
+| Next authorized implementation work item | None until DB-02 approval, commit, and `Next slice` |
 
 ## Approved and Completed Phase State
 
@@ -27,33 +27,35 @@
 
 - The application is still the Create Next App scaffold.
 - The Prisma schema now contains the four approved domain enums and the
-  approved Location model.
+  approved Location and IssueCategory models.
 - There is no Prisma migration history.
 - PostgreSQL connection through `pg` passed.
-- DB-01 Prisma schema formatting passed through `npx.cmd prisma format`.
-- DB-01 Prisma schema validation passed through
+- DB-02 Prisma schema formatting passed through `npx.cmd prisma format`.
+- DB-02 Prisma schema validation passed through
   `npx.cmd prisma validate`.
-- DB-01 Prisma Client generation passed through
+- DB-02 Prisma Client generation passed through
   `npx.cmd prisma generate`.
-- DB-01 lint passed through `npm.cmd run lint`.
-- DB-01 production build passed through `npm.cmd run build` when network
+- DB-02 lint passed through `npm.cmd run lint`.
+- DB-02 production build passed through `npm.cmd run build` when network
   access was available for Google Fonts.
 - The Git repository was verified as clean before this documentation
   work item.
 
 No migration, `db push`, seed, SQL, or other database command was run
-for DB-01.
+for DB-02.
 
 ## Completed Work Items
 
-DB-01 is not complete until it receives `Approve implementation` and is
-committed.
+- DB-01 was approved and committed as `0520ddb`.
+- DB-02 is not complete until it receives `Approve implementation` and
+  is committed.
 
 ## Chronological Implementation Index
 
 | Work item | Result | Worklog | Commit |
 | --- | --- | --- | --- |
-| DB-01 | Awaiting implementation approval | [DB-01 worklog](worklogs/DB-01.md) | Not committed |
+| DB-01 | Completed | [DB-01 worklog](worklogs/DB-01.md) | `0520ddb` |
+| DB-02 | Awaiting implementation approval | [DB-02 worklog](worklogs/DB-02.md) | Not committed |
 
 Future entries must link to an actual worklog based on the implemented
 Git diff and include the real accepted commit hash.
@@ -71,5 +73,5 @@ Git diff and include the real accepted commit hash.
 
 ## Next Authorized Work
 
-DB-01 must receive `Approve implementation` before it can be committed.
-Codex must not begin or plan DB-02 before a later `Next slice`.
+DB-02 must receive `Approve implementation` before it can be committed.
+Codex must not begin or plan DB-03 before a later `Next slice`.

@@ -10,6 +10,8 @@ Current repository state:
 
 - DB-01 implements the approved domain enums and Location model in
   `prisma/schema.prisma`.
+- DB-02 implements the approved IssueCategory model in
+  `prisma/schema.prisma`.
 - There is no Prisma migration history.
 - Prisma migration has not been tested.
 - The previously reported Windows `schema-engine-windows.exe`
@@ -87,6 +89,16 @@ Approved fields:
 | `sortOrder` | Staff-controlled display order |
 | `createdAt` | Creation timestamp |
 | `updatedAt` | Last-update timestamp |
+
+DB-02 implements `nameFi` as a required String, `isUrgent` with a
+default of `false`, `mergeMode` with a default of `MERGE_OPEN`,
+`requiresDescription` with a default of `false`, and `isActive` with a
+default of `true`. `sortOrder` is a required Int without a default.
+Timestamps use the same Prisma-managed behavior as Location.
+
+DB-02 adds no name uniqueness rule, indexes, mappings, String length
+constraints, Issue relation, or seed behavior. These details remain
+deferred to their approved later work items.
 
 **Approved Decisions:**
 
