@@ -21,8 +21,10 @@ hosted PostgreSQL for the later deployed environment.
 
 The repository currently installs Next.js 16.2.12, React 19.2.4,
 TypeScript, Prisma 7.9.1, `pg`, the Prisma PostgreSQL adapter, Tailwind
-CSS 4, dotenv, and ESLint. Better Auth, Zod, Sonner, and shadcn/ui
-components and configuration are approved but not yet installed.
+CSS 4, dotenv, ESLint, Better Auth 1.6.25, the Better Auth Prisma
+adapter 1.6.25, and the Better Auth schema generator CLI 1.6.25. Zod,
+Sonner, and shadcn/ui components and configuration are approved but not
+yet installed.
 
 ## Local Development
 
@@ -47,9 +49,9 @@ The intended setup uses a tracked `.env.example` as the safe template:
 Copy-Item .env.example .env
 ```
 
-`.env.example` is not yet present and must be added only in a separately
-approved implementation work item. Never commit `.env` or expose its
-values.
+The tracked `.env.example` contains placeholders for the database and
+Better Auth environment boundary. Replace placeholders only in the
+untracked `.env`; never commit `.env` or expose its values.
 
 ### Prisma Client generation
 
@@ -73,11 +75,12 @@ npm run build
 
 Phases 1–6 are approved, the Phase 4 low-fidelity wireframes and screen
 structure are approved, and Phase 7 environment setup is complete.
-Phase 8 database implementation is next.
+Phase 8 database implementation is in progress.
 
-The application remains the Create Next App scaffold. The Prisma schema
-contains no Ilmo domain models, there is no migration history, and
-Prisma migration has not been tested. Windows currently blocks
+The application UI remains the Create Next App scaffold. The Prisma
+schema contains the approved Ilmo domain models and the Better Auth
+models verified in DB-04B. There is no migration history, and Prisma
+migration has not been tested. Windows currently blocks
 `schema-engine-windows.exe`; this remains a known risk until resolved
 and verified.
 

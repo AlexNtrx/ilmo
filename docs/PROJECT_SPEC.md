@@ -20,7 +20,8 @@ Version 0 includes:
 - Open-issue matching, confirmation tracking, and issue creation
 - Staff authentication and active-issue management
 - Issue resolution and invalidation with append-only status history
-- Staff-owned issue-category management
+- Admin-owned issue-category management
+- Admin-only basic user management
 - Basic duplicate and rate-limit protection
 
 ## 3. Approved Exclusions
@@ -30,6 +31,9 @@ Version 0 includes:
 - Public users do not sign in.
 - Public users do not see existing issues.
 - There is no public sign-up.
+- Version 0 does not expose ban, unban, account disabling, account
+  re-enabling, impersonation, email editing, session-listing UI, or
+  manual session-management UI.
 - Version 0 does not support reopening an issue.
 - Issues are not deleted through the Version 0 application.
 - Version 0 has no push, email, or SMS issue notifications.
@@ -43,11 +47,20 @@ An unauthenticated visitor who opens a location-specific report form
 from a QR code and submits one overall report containing one or more
 selected categories.
 
-### Staff User
+### Admin
 
-An authenticated user who can view active issues, inspect issue details
-and confirmation counts, close open issues, and manage issue
-categories. Staff authentication uses Better Auth.
+An authenticated user who can use the staff dashboard, close issues,
+manage issue categories, and perform the approved basic user-management
+operations.
+
+### Staff
+
+An authenticated user who can use the dashboard, inspect issues and
+confirmation counts, and close open issues. Staff cannot manage issue
+categories, users, roles, or system configuration.
+
+Both roles authenticate through Better Auth with username and password.
+The only application roles are `admin` and `staff`.
 
 ## 5. Approved User Flows
 
@@ -64,19 +77,21 @@ categories. Staff authentication uses Better Auth.
 8. Every selected category is processed independently.
 9. The reporter receives one neutral overall success result.
 
-### Staff Flow
+### Authenticated Issue Flow
 
-1. A staff user signs in through Better Auth. There is no public
-   sign-up.
-2. The staff user views active issues.
-3. The staff user can open issue details and view confirmation counts.
-4. The staff user can change an `OPEN` issue to `RESOLVED` or `INVALID`.
+1. An admin or staff user signs in with username and password. There is
+   no public sign-up.
+2. The authenticated user views active issues.
+3. The authenticated user can open issue details and view confirmation
+   counts.
+4. The authenticated user can change an `OPEN` issue to `RESOLVED` or
+   `INVALID`.
 5. The close operation also appends the corresponding status-history
    record.
 
 ### Issue Category Management Flow
 
-Authenticated staff can:
+Only an admin can:
 
 - Create categories
 - Edit categories
@@ -86,6 +101,43 @@ Authenticated staff can:
 
 A category referenced by an Issue cannot be hard-deleted. It must be
 deactivated when history must be preserved.
+
+### User Management Flow
+
+Only an admin can:
+
+- Create a user
+- List and view users
+- Edit username
+- Edit name
+- Edit role
+- Reset a password
+- Delete a user
+
+The create-user form contains `username`, `name`, temporary password,
+and role. The edit-user form contains username, name, role,
+reset-password action, and delete-user action. The login form contains
+only username and password.
+
+**Approved Decisions:**
+
+- The only roles are `admin` and `staff`.
+- Role input must be one scalar value; arrays, comma-separated roles,
+  and unknown values are rejected on the server.
+- New accounts default to `staff` when no approved admin role selection
+  is supplied.
+- Only admins can manage users or roles.
+- The last remaining admin cannot be demoted or deleted.
+- An admin cannot delete their own account in Version 0.
+- Password reset automatically revokes the target user's sessions.
+- User deletion cascades to Better Auth Session and Account records.
+- User deletion preserves IssueStatusHistory and sets its
+  `changedByUserId` to null.
+- Internal email is generated on the server from an opaque UUID and
+  does not change when username changes.
+- Before deleting or demoting an admin, the server counts admins and
+  rejects the operation when only one admin remains.
+- Advanced concurrency protection for the last-admin check is deferred.
 
 ## 6. Approved Business Rules
 
@@ -198,10 +250,12 @@ Derived from the current repository and `package.json`:
 - Tailwind CSS 4
 - dotenv
 - ESLint
+- Better Auth 1.6.25
+- Better Auth Prisma adapter 1.6.25
+- Better Auth schema generator CLI 1.6.25
 
 #### Approved but Not Yet Installed
 
-- Better Auth
 - Zod
 - Sonner
 - shadcn/ui components and configuration
@@ -263,7 +317,9 @@ The following decision groups are approved:
 - Transaction boundaries
 - Duplicate and rate-limit requirements
 - Full-stack application architecture
-- Better Auth for staff
+- Better Auth username-and-password authentication
+- Two-role authorization and admin-only basic user management
+- User deletion preservation and cascade behavior
 - Phase 4 wireframes and screen structure
 - Finnish application language
 - Vercel and hosted PostgreSQL deployment direction
@@ -283,17 +339,17 @@ revised later through an explicit decision:
 The following remain open and must not be converted into decisions
 without owner approval:
 
-- Exact Better Auth schema integration
-- Better Auth identity field types, verified against its implementation
-  requirements
+- Advanced concurrency protection for the last-admin check
+- Temporary-password delivery
+- Final username length, normalization, and reserved-name policy
 - `sourceHash` generation, privacy, retention, expiry, and uniqueness
 - Rate-limit identity, key, storage mechanism, and privacy handling
 - Prisma representation of the one-`OPEN`-issue invariant
 - Whether a PostgreSQL partial unique index and custom migration SQL are
   required
 - Final database index names
-- Cascade and referential actions
+- Referential actions not explicitly approved in the implemented
+  schema
 - Final colors, typography, spacing, and component styling
 - Exact Finnish UI copy
 - Final accessibility target
-- The safe `.env.example` template, which is not currently present

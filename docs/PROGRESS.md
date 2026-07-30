@@ -5,83 +5,65 @@
 | Field | Actual state |
 | --- | --- |
 | Current phase | Phase 8 — Database implementation |
-| Current authorized work item | DB-04A — IssueStatusHistory |
-| Work-item status | Implemented and validated; awaiting `Approve implementation` |
-| Active Git branch | `feature/db-04a-issue-status-history` |
-| Starting commit | `1d63226` |
+| Current work item | DB-04B — Auth schema integration |
+| Status | Implemented and validated; awaiting `Approve implementation` |
+| Active branch | `feature/db-04b-better-auth-schema` |
+| Base commit | `ce1946f` |
 | Plan approval | Approved |
 | Implementation approval | Pending |
-| Next implementation phase | DB-04B follows approved DB-04A integration |
-| Next authorized implementation work item | None until DB-04A approval, commit, and `Next slice` |
+| Next authorized work | None |
 
-## Approved and Completed Phase State
+## Completed State
 
-- Phases 1–6 are approved.
-- Phase 4 low-fidelity wireframes and screen structure are approved.
+- Phases 1–6 and the Phase 4 wireframes are approved.
 - Phase 7 environment setup is complete.
-- Phase 8 database implementation is in progress.
-- The current documentation handoff is implemented, validated, and
-  approved.
+- DB-01 committed as `0520ddb`.
+- DB-02 committed as `d418496`.
+- DB-03 committed as `1d63226`.
+- DB-04A committed as `ce1946f`.
 
-## Current Implementation State
+## Current Implementation
 
-- The application is still the Create Next App scaffold.
-- The Prisma schema now contains the four approved domain enums and the
-  approved Location, IssueCategory, Issue, and IssueConfirmation
-  models, plus IssueStatusHistory.
-- `changedByUserId` is a temporarily unbound nullable String, not a
-  verified foreign key.
-- There is no Prisma migration history.
-- PostgreSQL connection through `pg` passed.
-- DB-04A Prisma schema formatting passed through
-  `npx.cmd prisma format`.
-- DB-04A Prisma schema validation passed through
-  `npx.cmd prisma validate`.
-- DB-04A Prisma Client generation passed through
-  `npx.cmd prisma generate`.
-- DB-04A lint passed through `npm.cmd run lint`.
-- DB-04A production build passed through `npm.cmd run build` when network
-  access was available for Google Fonts.
-- The Git repository was verified as clean before this documentation
-  work item.
+- The application UI remains the Create Next App scaffold.
+- The Prisma schema contains the approved Ilmo domain models and the
+  verified Better Auth User, Session, Account, and Verification models.
+- IssueStatusHistory now has an optional User relation using
+  `onDelete: SetNull`.
+- Better Auth 1.6.25 is configured for username/password with `admin`
+  and `staff` roles and public sign-up disabled.
+- Basic admin-only CRUD permissions are defined; staff has none.
+- No auth route, login UI, dashboard UI, or user CRUD service exists.
+- No Prisma migration history exists and migration remains untested.
 
-No migration, `db push`, seed, SQL, or other database command was run
-for DB-04A.
+## DB-04B Validation
 
-## Completed Work Items
+- Prisma format, validation, and Client generation passed.
+- Lint passed.
+- The sandboxed build failed only on Google Fonts network access.
+- The unchanged build passed with network access.
+- No migration or database-mutating command ran.
 
-- DB-01 was approved and committed as `0520ddb`.
-- DB-02 was approved and committed as `d418496`.
-- DB-03 was approved and committed as `1d63226`.
-- DB-04A is not complete until it receives `Approve implementation` and
-  is committed.
+## Worklog Index
 
-## Chronological Implementation Index
+| Work item | Worklog | Commit |
+| --- | --- | --- |
+| DB-01 | [DB-01](worklogs/DB-01.md) | `0520ddb` |
+| DB-02 | [DB-02](worklogs/DB-02.md) | `d418496` |
+| DB-03 | [DB-03](worklogs/DB-03.md) | `1d63226` |
+| DB-04A | [DB-04A](worklogs/DB-04A.md) | `ce1946f` |
+| DB-04B | [DB-04B](worklogs/DB-04B.md) | Not committed |
 
-| Work item | Result | Worklog | Commit |
-| --- | --- | --- | --- |
-| DB-01 | Completed | [DB-01 worklog](worklogs/DB-01.md) | `0520ddb` |
-| DB-02 | Completed | [DB-02 worklog](worklogs/DB-02.md) | `d418496` |
-| DB-03 | Completed | [DB-03 worklog](worklogs/DB-03.md) | `1d63226` |
-| DB-04A | Awaiting implementation approval | [DB-04A worklog](worklogs/DB-04A.md) | Not committed |
+## Blockers and Risks
 
-Future entries must link to an actual worklog based on the implemented
-Git diff and include the real accepted commit hash.
-
-## Blockers and Known Risks
-
-- Windows PowerShell execution policy blocks the `npx.ps1` and
-  `npm.ps1` wrappers; the `.cmd` equivalents work.
-- The previously reported Windows `schema-engine-windows.exe`
-  limitation remains a migration risk until migration is tested.
-- Prisma migration has not been tested.
-- The repository does not currently contain `.env.example`.
-- Better Auth, Zod, Sonner, and shadcn/ui components and configuration
-  are approved but not installed.
+- Windows still blocks `schema-engine-windows.exe`; migration is
+  untested.
+- Runtime authentication and user CRUD are not implemented or tested.
+- Advanced concurrency protection for the last-admin rule is deferred.
+- npm reported dependency vulnerabilities during installation; no
+  automatic audit fix was run.
 
 ## Next Authorized Work
 
-DB-04A must receive `Approve implementation` before it can be committed.
-Codex must not begin or plan DB-04B before a later `Next slice`. DB-05
-must not begin before DB-04B is approved, implemented, committed, and
-integrated into `main`.
+DB-05 remains unauthorized until DB-04B receives implementation
+approval, is committed, integrated into `main`, and followed by
+`Next slice`.
