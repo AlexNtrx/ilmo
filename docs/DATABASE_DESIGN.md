@@ -12,6 +12,8 @@ Current repository state:
   `prisma/schema.prisma`.
 - DB-02 implements the approved IssueCategory model in
   `prisma/schema.prisma`.
+- DB-03 implements the approved Issue and IssueConfirmation models and
+  their relations in `prisma/schema.prisma`.
 - There is no Prisma migration history.
 - Prisma migration has not been tested.
 - The previously reported Windows `schema-engine-windows.exe`
@@ -131,11 +133,24 @@ Approved fields and relationships:
 | `createdAt` | Creation timestamp |
 | `updatedAt` | Last-update timestamp |
 
+DB-03 implements required `locationId` and `categoryId` foreign keys.
+`description` is nullable and uses PostgreSQL `VarChar(200)`. `status`
+defaults to `OPEN`, `priority` defaults to `NORMAL`,
+`firstReportedAt` and `lastConfirmedAt` default to the current
+timestamp, and `closedAt` is nullable.
+
+Location and IssueCategory expose reverse `issues` relations. Their
+Issue relations use `onDelete: Restrict` and `onUpdate: Cascade`.
+Issue exposes a reverse `confirmations` relation.
+
 Standard `MERGE_OPEN` matching uses the same Location, IssueCategory,
 and `OPEN` status. `ALWAYS_CREATE` categories do not reuse an existing
 Issue.
 
 Issues are not deleted through the Version 0 application.
+
+DB-03 adds no indexes or database-level one-`OPEN`-issue invariant.
+Those details remain deferred.
 
 ## IssueConfirmation
 
@@ -147,6 +162,10 @@ Approved concepts:
 | Issue relation | Issue being confirmed |
 | `sourceHash` | Pending privacy and implementation design |
 | `createdAt` | Confirmation timestamp |
+
+DB-03 implements required `issueId`, nullable unconstrained
+`sourceHash`, and `createdAt` with a current-timestamp default. The
+Issue relation uses `onDelete: Restrict` and `onUpdate: Cascade`.
 
 No final `sourceHash` algorithm, retention period, expiry behavior, or
 uniqueness rule is approved.

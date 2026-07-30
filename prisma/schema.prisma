@@ -42,6 +42,7 @@ model Location {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  issues        Issue[]
 }
 
 model IssueCategory {
@@ -54,4 +55,30 @@ model IssueCategory {
   sortOrder           Int
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
+  issues              Issue[]
+}
+
+model Issue {
+  id              Int                 @id @default(autoincrement())
+  locationId      Int
+  categoryId      Int
+  description     String?             @db.VarChar(200)
+  status          IssueStatus         @default(OPEN)
+  priority        IssuePriority       @default(NORMAL)
+  firstReportedAt DateTime            @default(now())
+  lastConfirmedAt DateTime            @default(now())
+  closedAt        DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  location        Location            @relation(fields: [locationId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  category        IssueCategory       @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  confirmations   IssueConfirmation[]
+}
+
+model IssueConfirmation {
+  id         Int      @id @default(autoincrement())
+  issueId    Int
+  sourceHash String?
+  createdAt  DateTime @default(now())
+  issue      Issue    @relation(fields: [issueId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
