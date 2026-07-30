@@ -14,6 +14,8 @@ Current repository state:
   `prisma/schema.prisma`.
 - DB-03 implements the approved Issue and IssueConfirmation models and
   their relations in `prisma/schema.prisma`.
+- DB-04A implements IssueStatusHistory and the reverse Issue relation.
+  `changedByUserId` is temporarily an unbound nullable String.
 - There is no Prisma migration history.
 - Prisma migration has not been tested.
 - The previously reported Windows `schema-engine-windows.exe`
@@ -191,6 +193,18 @@ Approved concepts:
 - Status history is append-only.
 - Version 0 does not support reopening.
 
+DB-04A implements an Int autoincrement `id`, required `issueId`,
+nullable `fromStatus`, required `toStatus`, required `changeSource`,
+nullable String `changedByUserId`, and `changedAt` defaulting to the
+current timestamp. The Issue relation uses `onDelete: Restrict` and
+`onUpdate: Cascade`; Issue exposes `statusHistory` as its reverse
+relation.
+
+`changedByUserId` is not a verified foreign key in DB-04A. It must not
+be used by runtime behavior before DB-04B verifies the Better Auth User
+schema and adds the relation. DB-04A adds no auth models, indexes, or
+database-level append-only enforcement.
+
 ## Better Auth Models
 
 Better Auth user and session models are part of the approved conceptual
@@ -200,6 +214,11 @@ during implementation.
 
 Staff-created history may have an optional relation to the Better Auth
 user responsible for the change.
+
+DB-04B must select and pin Better Auth packages, verify the actual auth
+configuration and generated Prisma schema, and obtain approval for
+identifiers, mappings, constraints, relations, and indexes before
+binding `changedByUserId` to User.
 
 ## Transaction Rules
 

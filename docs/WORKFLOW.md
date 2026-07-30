@@ -50,15 +50,27 @@ Phase 8 is divided into small reviewable work items:
 - Plan the one-`OPEN`-issue invariant and `sourceHash` boundaries without
   inventing unapproved privacy decisions.
 
-#### DB-04 — IssueStatusHistory and Better Auth Relationship
+#### DB-04A — IssueStatusHistory
 
 - Implement the approved history concept and append-only model.
-- Integrate only verified Better Auth schema requirements.
-- Preserve nullable initial `fromStatus` and optional staff-user
-  relationship.
+- Preserve nullable initial `fromStatus`.
+- Keep `changedByUserId` as a temporarily unbound nullable String.
+- Do not add Better Auth models, packages, configuration, or relations.
+
+#### DB-04B — Better Auth Schema Verification and User Relation
+
+- Select and pin the Better Auth and Prisma adapter versions.
+- Verify official installation and Prisma 7 integration requirements.
+- Approve the minimal auth configuration, authentication method,
+  plugins, and additional fields.
+- Generate or inspect the Prisma schema from the actual configuration.
+- Approve mappings, identifiers, constraints, relations, and indexes.
+- Add the `changedByUser` relation only after User is verified.
 
 #### DB-05 — Migration, Seed Data, and Database Verification
 
+- Begin only after DB-04B is approved, implemented, committed, and
+  integrated into `main`.
 - Plan and create migration artifacts only after specific approval.
 - Insert default categories only when the category table is empty.
 - Verify seed idempotency and that seeded categories remain editable.
