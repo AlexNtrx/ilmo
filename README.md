@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ilmo
 
-## Getting Started
+Ilmo is a QR-based facility issue reporting system designed for a
+fictional small shopping centre.
 
-First, run the development server:
+Visitors can scan a QR code at a toilet location and report one or
+multiple issues without creating an account. The system automatically
+merges matching reports into an existing open issue or creates a new
+issue.
+
+Staff members can sign in to view prioritized issues, manage issue
+categories, and mark issues as resolved or invalid.
+
+## Project Status
+
+The project is currently under development.
+
+Current phase:
+
+- Environment setup and version control
+
+## Version 0 Scope
+
+### Public reporter
+
+- Open a location-specific form through a QR code
+- Select one or multiple issue categories
+- Add a short description when required
+- Submit a report without signing in
+- Receive a neutral success response
+
+### Staff
+
+- Sign in to the staff workspace
+- View active issues ordered by priority
+- View issue details and confirmation counts
+- Mark issues as resolved or invalid
+- View issue status history
+- Create, edit, reorder, activate, deactivate, and delete unused issue
+  categories
+
+## Core Business Rule
+
+Matching standard reports are merged when they have:
+
+- The same location
+- The same issue category
+- An existing issue with the `OPEN` status
+
+Free-text categories configured with `ALWAYS_CREATE` always create a
+new issue.
+
+## Technology Stack
+
+- Next.js
+- TypeScript
+- PostgreSQL
+- Prisma ORM
+- Tailwind CSS
+- shadcn/ui
+- Sonner
+- Zod
+- Better Auth
+- Vercel
+
+## Local Development
+
+### Requirements
+
+- Node.js 24 LTS
+- npm
+- Git
+- PostgreSQL
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm install
