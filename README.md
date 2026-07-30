@@ -1,67 +1,28 @@
 # Ilmo
 
-Ilmo is a QR-based facility issue reporting system designed for a
-fictional small shopping centre.
-
-Visitors can scan a QR code at a toilet location and report one or
-multiple issues without creating an account. The system automatically
-merges matching reports into an existing open issue or creates a new
-issue.
-
-Staff members can sign in to view prioritized issues, manage issue
-categories, and mark issues as resolved or invalid.
-
-## Project Status
-
-The project is currently under development.
-
-Current phase:
-
-- Environment setup and version control
+Ilmo is a QR-based facility issue reporting system for a fictional
+small shopping-centre toilet pilot. Public reporters submit
+location-specific reports without signing in, while authenticated staff
+review and manage active issues.
 
 ## Version 0 Scope
 
-### Public reporter
+- Finnish public reporting through a location QR code
+- One or multiple independently processed issue categories
+- Open-issue matching and confirmation tracking
+- Staff issue review, resolution, invalidation, and category management
+- No push, email, or SMS issue notifications
 
-- Open a location-specific form through a QR code
-- Select one or multiple issue categories
-- Add a short description when required
-- Submit a report without signing in
-- Receive a neutral success response
+## Technology Status
 
-### Staff
+The approved stack is Next.js App Router, TypeScript, PostgreSQL, Prisma
+ORM, Tailwind CSS, shadcn/ui, Sonner, Zod, Better Auth, Vercel, and
+hosted PostgreSQL for the later deployed environment.
 
-- Sign in to the staff workspace
-- View active issues ordered by priority
-- View issue details and confirmation counts
-- Mark issues as resolved or invalid
-- View issue status history
-- Create, edit, reorder, activate, deactivate, and delete unused issue
-  categories
-
-## Core Business Rule
-
-Matching standard reports are merged when they have:
-
-- The same location
-- The same issue category
-- An existing issue with the `OPEN` status
-
-Free-text categories configured with `ALWAYS_CREATE` always create a
-new issue.
-
-## Technology Stack
-
-- Next.js
-- TypeScript
-- PostgreSQL
-- Prisma ORM
-- Tailwind CSS
-- shadcn/ui
-- Sonner
-- Zod
-- Better Auth
-- Vercel
+The repository currently installs Next.js 16.2.12, React 19.2.4,
+TypeScript, Prisma 7.9.1, `pg`, the Prisma PostgreSQL adapter, Tailwind
+CSS 4, dotenv, and ESLint. Better Auth, Zod, Sonner, and shadcn/ui
+components and configuration are approved but not yet installed.
 
 ## Local Development
 
@@ -76,3 +37,57 @@ new issue.
 
 ```bash
 npm install
+```
+
+### Environment variables
+
+The intended setup uses a tracked `.env.example` as the safe template:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+`.env.example` is not yet present and must be added only in a separately
+approved implementation work item. Never commit `.env` or expose its
+values.
+
+### Prisma Client generation
+
+```bash
+npx prisma generate
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+## Current Status
+
+Phases 1–6 are approved, the Phase 4 low-fidelity wireframes and screen
+structure are approved, and Phase 7 environment setup is complete.
+Phase 8 database implementation is next.
+
+The application remains the Create Next App scaffold. The Prisma schema
+contains no Ilmo domain models, there is no migration history, and
+Prisma migration has not been tested. Windows currently blocks
+`schema-engine-windows.exe`; this remains a known risk until resolved
+and verified.
+
+The PostgreSQL connection through `pg`, Prisma schema validation,
+Prisma Client generation, `npm run lint`, and `npm run build` have
+passed in the current setup.
+
+## Documentation
+
+- [Project specification](docs/PROJECT_SPEC.md)
+- [Database design](docs/DATABASE_DESIGN.md)
+- [Implementation workflow](docs/WORKFLOW.md)
+- [Project progress](docs/PROGRESS.md)
