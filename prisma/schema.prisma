@@ -11,3 +11,35 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum IssueStatus {
+  OPEN
+  RESOLVED
+  INVALID
+}
+
+enum IssuePriority {
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum IssueMergeMode {
+  MERGE_OPEN
+  ALWAYS_CREATE
+}
+
+enum IssueStatusChangeSource {
+  SYSTEM
+  STAFF
+}
+
+model Location {
+  id            Int      @id @default(autoincrement())
+  publicCode    String   @unique
+  nameFi        String
+  descriptionFi String
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -8,10 +8,25 @@ already exist.
 
 Current repository state:
 
-- `prisma/schema.prisma` has no Ilmo domain models.
+- DB-01 implements the approved domain enums and Location model in
+  `prisma/schema.prisma`.
 - There is no Prisma migration history.
 - Prisma migration has not been tested.
-- Windows currently blocks `schema-engine-windows.exe`.
+- The previously reported Windows `schema-engine-windows.exe`
+  limitation remains a migration risk until migration is verified.
+
+## DB-01 Prisma Enum Decisions
+
+DB-01 uses these approved Prisma enum names and values:
+
+| Prisma enum | Values |
+| --- | --- |
+| `IssueStatus` | `OPEN`, `RESOLVED`, `INVALID` |
+| `IssuePriority` | `NORMAL`, `HIGH`, `URGENT` |
+| `IssueMergeMode` | `MERGE_OPEN`, `ALWAYS_CREATE` |
+| `IssueStatusChangeSource` | `SYSTEM`, `STAFF` |
+
+No database migration is created or applied in DB-01.
 
 ## Approved Domain Entities
 
@@ -46,6 +61,13 @@ Approved fields:
 | `isActive` | Availability flag |
 | `createdAt` | Creation timestamp |
 | `updatedAt` | Last-update timestamp |
+
+DB-01 implements `nameFi` and `descriptionFi` as required Strings,
+`isActive` with a default of `true`, `createdAt` with a default current
+timestamp, and `updatedAt` with Prisma-managed update behavior. It uses
+the default Prisma table and column names without length constraints.
+The format and normalization rules for `publicCode` remain outside the
+DB-01 scope; the schema enforces uniqueness.
 
 Historical locations should be deactivated instead of deleted when
 preservation is required.
