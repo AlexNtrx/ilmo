@@ -307,6 +307,12 @@ be printed or committed.
 - Vercel is the deployment target.
 - Hosted PostgreSQL is planned for the deployed environment.
 
+**Approved Decision:** Local development records are not part of the release
+artifact. Production deployment must use a clean hosted PostgreSQL database,
+and the local database must not be copied into production. Review or cleanup
+work may remove only records it created and can identify exactly; unknown local
+records must never be deleted by inference.
+
 ### Technology Status
 
 #### Approved Stack

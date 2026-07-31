@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { formatIssueReferenceCount } from "@/lib/admin/category-copy";
 import type { AdminActionResult, ManagedCategory } from "@/lib/admin/types";
 
 const selectClassName =
@@ -165,7 +166,7 @@ function CategoryRow({
               ) : null}
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              {category.issueCount} ilmoitusviitettä · järjestys {category.sortOrder}
+              {formatIssueReferenceCount(category.issueCount)}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

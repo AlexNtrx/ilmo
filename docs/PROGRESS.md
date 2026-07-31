@@ -4,11 +4,11 @@
 
 | Field | Actual state |
 | --- | --- |
-| Current phase | Vertical slices — staff workspace |
-| Current work item | VS-03 — Category and user CRUD |
-| Status | Implementation approved; commit pending |
-| Active branch | `feature/vs-03-category-user-crud` |
-| Base commit | `238092e50ea6bb3df98104268bbc3661b4605f02` |
+| Current phase | Release readiness |
+| Current work item | RR-01 — UI review and release readiness |
+| Status | Ilmo Version 0 release candidate; RR-01 implementation approved; commit pending |
+| Active branch | `feature/rr-01-release-readiness` |
+| Base commit | `4d070cbb9b63849cf66e45f2f16fe38f332975fb` |
 | Plan approval | Approved |
 | Implementation approval | Approved |
 | Next authorized work | None |
@@ -17,8 +17,8 @@
 
 - Phases 1–7 and the Phase 4 wireframes are approved.
 - DB-01 through DB-05 are committed.
-- VS-01 is committed as `ec9417d`; VS-02 is committed as `238092e`.
-  Both are integrated into `main`.
+- VS-01 is committed as `ec9417d`, VS-02 as `238092e`, and VS-03 as
+  `4d070cb`. All three are integrated into `main`.
 
 ## Current Implementation
 
@@ -53,6 +53,8 @@
   change, password reset/session revocation, and protected deletion.
 - External `/api/auth/admin/*` requests return 404; Ilmo Server Actions pass
   authenticated request headers to the verified Better Auth Admin APIs.
+- `/` redirects to `/staff` and relies on the existing staff authentication
+  boundary for unauthenticated login routing.
 
 ## VS-03 Validation
 
@@ -102,11 +104,11 @@
 | DB-05 | [DB-05](worklogs/DB-05.md) | `516cf09` |
 | VS-01 | [VS-01](worklogs/VS-01.md) | `ec9417d` |
 | VS-02 | [VS-02](worklogs/VS-02.md) | `238092e` |
-| VS-03 | [VS-03](worklogs/VS-03.md) | Not committed |
+| VS-03 | [VS-03](worklogs/VS-03.md) | `4d070cb` |
+| RR-01 | [RR-01](worklogs/RR-01.md) | Not committed |
 
 ## Blockers and Risks
 
-- Authenticated browser verification still requires the owner to sign in.
 - Better Auth build-time warnings remain when its URL and secret are not
   available to the build process; no values were read or printed.
 - The Windows Prisma engine had an earlier intermittent `spawn UNKNOWN`.
@@ -115,7 +117,16 @@
   constraint remain accepted VS-01 limitations.
 - npm reports 18 dependency vulnerabilities; no audit fix was run.
 - Automated browser end-to-end tests remain intentionally absent.
+- Unknown local Issues and Users are retained because their ownership cannot be
+  established safely. They are excluded from the release artifact: production
+  must use a clean hosted PostgreSQL database, never a copy of the local data.
+- RR-01-D05 passed through the existing admin UI: the cleaning Category is
+  active and the public report form shows all six active Categories in the
+  approved deterministic order.
+- The authenticated Chrome control surface could not emulate the requested
+  360, 390, 768, and 1280 pixel viewports or a genuinely hidden tab. Those
+  manual checks remain honestly recorded as not run rather than passed.
 
 ## Next Authorized Work
 
-None until VS-03 receives implementation approval and is committed.
+None until RR-01 is committed and the owner issues `Next slice`.

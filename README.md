@@ -86,8 +86,9 @@ Phases 1–6 are approved, the Phase 4 low-fidelity wireframes and screen
 structure are approved, and Phase 7 environment setup is complete.
 Phase 8 database implementation is complete.
 
-The root route remains the Create Next App scaffold. VS-01 implements the
-Finnish public reporting flow at `/report/[publicCode]`; VS-02 adds the
+The root route forwards to the protected `/staff` workspace, whose existing
+authentication boundary sends unauthenticated users to `/staff/login`. VS-01
+implements the Finnish public reporting flow at `/report/[publicCode]`; VS-02 adds the
 protected staff Issue workspace; and VS-03 implements admin-only
 Category and User management. The Prisma schema contains the approved Ilmo
 domain models, Better Auth models, report-specific confirmation
@@ -95,6 +96,10 @@ descriptions, and the temporary duplicate/rate-limit ledger. The DB-05
 initial migration and the VS-01 reporting migration are applied to the
 local `ilmo` database. The first admin, six Finnish categories, and
 pilot Location were seeded and verified idempotently.
+
+Local development records are not part of the release artifact. Production
+deployment must use a clean hosted PostgreSQL database; the local database must
+not be copied into production.
 
 The PostgreSQL connection through `pg`, Prisma schema validation,
 Prisma Client generation, `npm run lint`, and `npm run build` have

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/staff/login-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getStaffActor } from "@/lib/staff/auth";
 
 export default async function StaffLoginPage() {
@@ -33,9 +33,9 @@ export default async function StaffLoginPage() {
             <p className="text-sm font-semibold text-primary">
               Henkilökunnan näkymä
             </p>
-            <CardTitle className="text-2xl tracking-tight sm:text-3xl">
+            <h1 className="text-2xl font-semibold leading-none tracking-tight sm:text-3xl">
               Kirjaudu sisään
-            </CardTitle>
+            </h1>
           </CardHeader>
           <CardContent>
             <LoginForm />

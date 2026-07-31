@@ -22,17 +22,13 @@ Codex must not implement before `Approve plan`, commit before
 
 ## Remaining Implementation Order
 
-1. VS-03 — Category and user CRUD
-2. UI review, testing, and deployment
+1. RR-01 — UI review and release readiness
+2. Deployment
 
-DB-05, VS-01, and VS-02 are committed and integrated into `main`. VS-03 is the
-current authorized milestone.
-
-VS-03 combines Category CRUD and basic admin-only User CRUD. User roles
-are one scalar `admin` or `staff` value. Password reset revokes the
-target user's sessions. The server prevents self-deletion and counts
-admins before deleting or demoting one, rejecting the operation when
-only one admin remains. Advanced concurrency protection is deferred.
+DB-05 and VS-01 through VS-03 are committed and integrated into `main`.
+RR-01 is the current authorized milestone. It reviews and corrects confirmed
+Version 0 defects without redesigning the approved flows or adding deployment
+configuration. Deployment remains a separate milestone.
 
 ## Mandatory Milestone Process
 
