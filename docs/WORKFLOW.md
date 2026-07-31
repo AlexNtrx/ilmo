@@ -22,15 +22,15 @@ Codex must not implement before `Approve plan`, commit before
 
 ## Remaining Implementation Order
 
-1. DB-04B — Auth schema integration
-2. DB-05 — Migration and seed
-3. VS-01 — Public reporting end-to-end
-4. VS-02 — Login, dashboard, resolve and invalid
-5. VS-03 — Category and user CRUD
-6. UI review, testing, and deployment
+1. DB-05 — Migration and seed
+2. VS-01 — Public reporting end-to-end
+3. VS-02 — Login, dashboard, resolve and invalid
+4. VS-03 — Category and user CRUD
+5. UI review, testing, and deployment
 
-DB-05 cannot begin until DB-04B is approved, committed, and integrated
-into `main`. It requires its own approved migration and seed plan.
+DB-05 has an approved migration and seed plan. Its initial migration is
+applied, seed idempotency is verified, and implementation approval is
+pending. VS-01 cannot begin until DB-05 is approved and committed.
 
 VS-03 combines Category CRUD and basic admin-only User CRUD. User roles
 are one scalar `admin` or `staff` value. Password reset revokes the
@@ -84,3 +84,5 @@ For every milestone:
   approval.
 - Keep the Windows Prisma engine limitation and untested migration path
   visible until resolved and verified.
+- Abort rather than confirm any unexpected migration reset prompt.
+- Review a create-only migration before applying it.

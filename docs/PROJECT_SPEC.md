@@ -202,6 +202,31 @@ identity, key, storage, and privacy design remain open.
   - `isActive`
   - `sortOrder`
 
+The approved initial categories are:
+
+| sortOrder | Finnish name | Urgent | Merge mode | Description required |
+| ---: | --- | --- | --- | --- |
+| 10 | WC-paperi on loppu | No | `MERGE_OPEN` | No |
+| 20 | Saippua on loppu | No | `MERGE_OPEN` | No |
+| 30 | Tila tarvitsee siivousta | No | `MERGE_OPEN` | No |
+| 40 | WC-istuin tai muu varuste on rikki | No | `MERGE_OPEN` | Yes |
+| 50 | Turvallisuusriski | Yes | `MERGE_OPEN` | Yes |
+| 60 | Muu ongelma | No | `MERGE_OPEN` | Yes |
+
+All initial categories are active. No initial category uses
+`ALWAYS_CREATE`.
+
+The pilot Location uses public code `pilot-wc-001`, Finnish name
+`Kauppakeskuksen WC`, and Finnish description
+`Pilottikohteen yleinen WC`. Seed execution creates it when absent and
+does not update an existing record.
+
+The seed provisions the first admin only when no admin exists. It uses
+server-only Better Auth account creation, an opaque internal email, and
+environment-provided username, name, and password. All required values
+must be valid before any seed write. Secrets and passwords must never
+be printed or committed.
+
 ## 7. Approved Architecture
 
 **Approved Decisions:**

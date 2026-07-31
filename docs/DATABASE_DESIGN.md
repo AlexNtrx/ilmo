@@ -17,10 +17,14 @@ Current repository state:
 - DB-04A implements IssueStatusHistory and the reverse Issue relation.
 - DB-04B integrates the Better Auth 1.6.25 generated schema and binds
   the nullable history actor to the verified User identifier.
-- There is no Prisma migration history.
-- Prisma migration has not been tested.
-- The previously reported Windows `schema-engine-windows.exe`
-  limitation remains a migration risk until migration is verified.
+- DB-05 created and applied the initial migration
+  `20260730184652_init` to the local `ilmo` database.
+- DB-05 seed and read-only verification scripts are prepared.
+- The first create-only attempt returned `spawn UNKNOWN` for
+  `schema-engine-windows.exe`; an approved retry succeeded.
+- The first admin, six categories, and pilot Location are seeded.
+- A second seed created no records, and full database verification
+  passed after both seed runs.
 
 ## DB-01 Prisma Enum Decisions
 
@@ -117,6 +121,28 @@ deferred to their approved later work items.
 - An unused category may be hard-deleted.
 - A category referenced by an Issue must be deactivated instead of
   hard-deleted.
+
+## Initial Seed
+
+**Approved Decisions:**
+
+- The seed inserts default categories only when IssueCategory is empty.
+- Existing categories are never overwritten.
+- Initial category sort orders are 10 through 60 in this order:
+  `WC-paperi on loppu`, `Saippua on loppu`,
+  `Tila tarvitsee siivousta`,
+  `WC-istuin tai muu varuste on rikki`, `Turvallisuusriski`, and
+  `Muu ongelma`.
+- `Turvallisuusriski` is urgent. The final three categories require a
+  description. All initial categories are active and use `MERGE_OPEN`.
+- The pilot Location has public code `pilot-wc-001`. It is created when
+  absent and an existing record is not updated.
+- When no admin exists, all initial-admin inputs are validated before
+  any seed write and Better Auth creates the credential account.
+- When an admin exists, provisioning is skipped without requiring the
+  initial-admin environment values.
+- Internal email is opaque and server-generated. Passwords and secrets
+  are never logged or committed.
 
 ## Issue
 

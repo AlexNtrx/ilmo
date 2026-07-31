@@ -22,9 +22,9 @@ hosted PostgreSQL for the later deployed environment.
 The repository currently installs Next.js 16.2.12, React 19.2.4,
 TypeScript, Prisma 7.9.1, `pg`, the Prisma PostgreSQL adapter, Tailwind
 CSS 4, dotenv, ESLint, Better Auth 1.6.25, the Better Auth Prisma
-adapter 1.6.25, and the Better Auth schema generator CLI 1.6.25. Zod,
-Sonner, and shadcn/ui components and configuration are approved but not
-yet installed.
+adapter 1.6.25, the Better Auth schema generator CLI 1.6.25, and tsx
+4.23.1. Zod, Sonner, and shadcn/ui components and configuration are
+approved but not yet installed.
 
 ## Local Development
 
@@ -59,6 +59,14 @@ untracked `.env`; never commit `.env` or expose its values.
 npx prisma generate
 ```
 
+After the initial migration has been applied, the approved database
+seed and read-only verification commands are:
+
+```bash
+npm run db:seed
+npm run db:verify
+```
+
 ### Development
 
 ```bash
@@ -79,10 +87,11 @@ Phase 8 database implementation is in progress.
 
 The application UI remains the Create Next App scaffold. The Prisma
 schema contains the approved Ilmo domain models and the Better Auth
-models verified in DB-04B. There is no migration history, and Prisma
-migration has not been tested. Windows currently blocks
-`schema-engine-windows.exe`; this remains a known risk until resolved
-and verified.
+models verified in DB-04B. The DB-05 initial migration has been created
+and applied to the local `ilmo` database. The first admin, six Finnish
+categories, and pilot Location have been seeded and verified
+idempotently. The previously blocked Windows Prisma schema engine
+succeeded on retry.
 
 The PostgreSQL connection through `pg`, Prisma schema validation,
 Prisma Client generation, `npm run lint`, and `npm run build` have
