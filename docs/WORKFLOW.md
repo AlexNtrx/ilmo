@@ -22,13 +22,12 @@ Codex must not implement before `Approve plan`, commit before
 
 ## Remaining Implementation Order
 
-1. VS-01 — Public reporting end-to-end
-2. VS-02 — Login, dashboard, resolve and invalid
-3. VS-03 — Category and user CRUD
-4. UI review, testing, and deployment
+1. VS-02 — Login, dashboard, resolve and invalid
+2. VS-03 — Category and user CRUD
+3. UI review, testing, and deployment
 
-DB-05 is committed and integrated into `main`. VS-01 is the current
-authorized milestone.
+DB-05 and VS-01 are committed and integrated into `main`. VS-02 is the
+current authorized milestone.
 
 VS-03 combines Category CRUD and basic admin-only User CRUD. User roles
 are one scalar `admin` or `staff` value. Password reset revokes the

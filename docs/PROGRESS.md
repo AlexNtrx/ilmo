@@ -4,74 +4,73 @@
 
 | Field | Actual state |
 | --- | --- |
-| Current phase | Vertical slices — public reporting |
-| Current work item | VS-01 — Public reporting end-to-end |
-| Status | Implemented and validated; awaiting `Approve implementation` |
-| Active branch | `feature/vs-01-public-reporting` |
-| Base commit | `516cf09e4152977303f4e7c093fa7f24325cf482` |
+| Current phase | Vertical slices — staff workspace |
+| Current work item | VS-02 — Login, dashboard, resolve and invalid |
+| Status | Implemented and approved |
+| Active branch | `feature/vs-02-staff-workspace` |
+| Base commit | `ec9417de49e65aba8868946c8cf724b56b23d4ab` |
 | Plan approval | Approved |
-| Implementation approval | Pending |
+| Implementation approval | Approved |
 | Next authorized work | None |
 
 ## Completed State
 
-- Phases 1–6 and the Phase 4 wireframes are approved.
-- Phase 7 environment setup is complete.
-- DB-01 committed as `0520ddb`.
-- DB-02 committed as `d418496`.
-- DB-03 committed as `1d63226`.
-- DB-04A committed as `ce1946f`.
-- DB-04B committed as `82ac789`.
-- DB-05 committed as `516cf09`.
+- Phases 1–7 and the Phase 4 wireframes are approved.
+- DB-01 through DB-05 are committed.
+- VS-01 is committed as `ec9417d` and integrated into `main`.
 
 ## Current Implementation
 
-- The root route remains the Create Next App scaffold.
-- `/report/[publicCode]` implements the approved Finnish public
-  reporting form and public reporting states.
-- The Prisma schema contains the approved Ilmo domain models and the
-  verified Better Auth User, Session, Account, and Verification models.
-- IssueStatusHistory now has an optional User relation using
-  `onDelete: SetNull`.
-- Better Auth 1.6.25 is configured for username/password with `admin`
-  and `staff` roles and public sign-up disabled.
-- Basic admin-only CRUD permissions are defined; staff has none.
-- DB-05 seed and read-only database verification scripts are prepared.
-- No auth route, login UI, dashboard UI, or user CRUD service exists.
-- Initial migration `20260730184652_init` is applied locally.
-- The first admin, six Finnish categories, and pilot Location are seeded.
-- IssueConfirmation stores report-specific descriptions while its
-  `sourceHash` remains null.
-- ReportSubmission provides the temporary cookie-based duplicate and
-  rate-limit ledger.
-- Reporting uses a Serializable Prisma transaction with at most two
-  retries for recognized `P2034` conflicts.
-- One local urgent verification Issue was created through the public
-  flow; its repeated identical submission produced no extra
-  confirmation. The owner removed that verification Issue and its
-  related confirmation and status history after review; seed-owned
-  Location and Category records remain unchanged.
+- `/report/[publicCode]` provides the approved public reporting flow.
+- `/api/auth/[...all]` mounts Better Auth with public email sign-up,
+  email sign-in, and username availability disabled.
+- `/staff/login` accepts username and password only.
+- `/staff` is protected by a live session and scalar `admin` or `staff`
+  role check and lists only open Issues.
+- `/staff` preserves Server Component data loading and refreshes it in the
+  background every 20 seconds while visible. Hidden tabs pause; returning
+  refreshes once immediately, with overlap prevention and listener cleanup.
+  Confirmation dialogs and pending staff mutations pause polling; temporary
+  refresh failures remain silent and release the next interval.
+- Staff details remain readable for open, resolved, and invalid Issues;
+  closed Issues expose no mutation actions.
+- Resolve and invalid Server Actions use an OPEN-only conditional update
+  and append the authenticated actor in the same transaction.
+- Successful closures revalidate both staff routes, show Sonner
+  feedback, and return to the dashboard.
+- The global Toaster persists through staff and login navigation.
+- Logout requires an accessible confirmation dialog. Better Auth
+  sign-out returns a typed result; only success navigates and shows
+  feedback, while failure remains recoverable in the dialog.
+- Resolve, invalid, and logout share one controlled confirmation shell
+  with semantic tones, pending locks, inline errors, and responsive actions.
+- No Prisma schema, migration, seed, category CRUD, or user CRUD change
+  is part of VS-02.
 
-## VS-01 Validation
+## VS-02 Validation
 
-- Prisma format, validation, Client generation, migration creation,
-  migration apply, and migration status passed.
-- Migration `20260731055125_add_public_reporting_support` was reviewed;
-  no reset or destructive SQL was requested.
-- All 13 focused `node:test` tests passed through `tsx`.
-- Lint and the production build passed.
-- Browser checks covered 320, 390, 768, and 1440 pixel widths with no
-  horizontal overflow or Next.js error overlay.
-- Active, missing, inactive, loading, validation, server-error, and
-  neutral-success states were inspected.
-- Validation focus recovery and visible keyboard focus were observed.
-- Owner review confirmed Space-key checkbox activation and the selected
-  visual and text state using a real keyboard.
-- The temporary inactive verification Location was removed.
-- Read-only verification confirmed one urgent Issue, one confirmation,
-  preserved description, null confirmation sourceHash, and initial
-  null-to-OPEN SYSTEM history.
-- The owner removed that manual verification data after review.
+- `npm test`: 35 tests passed, including all 13 VS-01 tests and focused
+  dashboard-refresh timing, visibility, overlap, and cleanup coverage.
+- Lint and production build passed after correcting one development-only
+  Server Action export error found during browser verification.
+- Disabled public auth endpoints returned 404; username sign-in remained
+  available and rejected invalid credentials.
+- Unauthenticated `/staff` access redirected to `/staff/login`.
+- Login layout showed no horizontal overflow at 360, 390, 768, 1280,
+  and 1600 pixel widths.
+- Owner review found that a successful Issue mutation could unmount the
+  action component before its success effect ran. The client now handles
+  the returned result before navigation, and the Toaster lives in the
+  root layout.
+- Owner review also found that logout had no confirmation or feedback.
+  The corrected dialog, status mutations, logout, and session-expiry
+  paths await real-session re-verification because no credential was
+  provided; no auth bypass or test account was created.
+- The shared dialog shell was rendered without overflow at 360, 390, and
+  1280 pixels. Escape, outside cancellation, focus restoration, login
+  navigation, one logout toast, and an error-free console were observed.
+- Production build and lint pass with the auto-refresh component. Real-session
+  cross-browser freshness, scroll, and open-dialog checks remain pending.
 
 ## Worklog Index
 
@@ -83,24 +82,21 @@
 | DB-04A | [DB-04A](worklogs/DB-04A.md) | `ce1946f` |
 | DB-04B | [DB-04B](worklogs/DB-04B.md) | `82ac789` |
 | DB-05 | [DB-05](worklogs/DB-05.md) | `516cf09` |
-| VS-01 | [VS-01](worklogs/VS-01.md) | Not committed |
+| VS-01 | [VS-01](worklogs/VS-01.md) | `ec9417d` |
+| VS-02 | [VS-02](worklogs/VS-02.md) | Not committed |
 
 ## Blockers and Risks
 
-- The schema engine is unsigned on this Windows installation; retry
-  succeeded, but the earlier intermittent `spawn UNKNOWN` remains a risk.
-- Better Auth warned that `BETTER_AUTH_URL` was not visible at runtime;
-  local runtime configuration must be verified before login work.
-- Runtime authentication and user CRUD are not implemented or tested.
-- Advanced concurrency protection for the last-admin rule is deferred.
-- Cookie clearing or changing browsers can bypass the pilot duplicate
-  and rate-limit identity.
-- The Serializable retry strategy has no additional database-level
-  one-OPEN-issue constraint.
+- Authenticated browser verification still requires the owner to sign in.
+- Better Auth build-time warnings remain when its URL and secret are not
+  available to the build process; no values were read or printed.
+- The Windows Prisma engine had an earlier intermittent `spawn UNKNOWN`.
+- Age-only HIGH promotion without a later report remains unresolved.
+- The pilot cookie identity and lack of a database one-OPEN-issue
+  constraint remain accepted VS-01 limitations.
+- npm reports 18 dependency vulnerabilities; no audit fix was run.
 - Automated browser end-to-end tests remain intentionally absent.
-- npm reports 18 dependency vulnerabilities (5 moderate and 13 high);
-  no automatic audit fix was run.
 
 ## Next Authorized Work
 
-None until VS-01 receives implementation approval and is committed.
+None until VS-02 receives implementation approval and is committed.

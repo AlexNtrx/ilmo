@@ -24,8 +24,8 @@ TypeScript, Prisma 7.9.1, `pg`, the Prisma PostgreSQL adapter, Tailwind
 CSS 4, dotenv, ESLint, Better Auth 1.6.25, the Better Auth Prisma
 adapter 1.6.25, the Better Auth schema generator CLI 1.6.25, and tsx
 4.23.1. VS-01 also installs Zod 4, shadcn/ui configuration and source
-components, and a locally bundled Inter variable font. Sonner remains
-approved but is not yet installed.
+components, a locally bundled Inter variable font, and Sonner for
+confirmed staff-action feedback.
 
 ## Local Development
 
@@ -88,7 +88,9 @@ Phase 8 database implementation is in progress.
 
 The root route remains the Create Next App scaffold, while VS-01 now
 implements the Finnish public reporting flow at
-`/report/[publicCode]`. The Prisma schema contains the approved Ilmo
+`/report/[publicCode]`. VS-02 adds username/password staff login,
+the protected `/staff` workspace, active-Issue details, and atomic
+resolve/invalid actions. The Prisma schema contains the approved Ilmo
 domain models, Better Auth models, report-specific confirmation
 descriptions, and the temporary duplicate/rate-limit ledger. The DB-05
 initial migration and the VS-01 reporting migration are applied to the

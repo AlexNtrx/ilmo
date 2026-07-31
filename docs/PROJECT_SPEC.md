@@ -84,13 +84,41 @@ The only application roles are `admin` and `staff`.
 
 1. An admin or staff user signs in with username and password. There is
    no public sign-up.
-2. The authenticated user views active issues.
+2. The authenticated user views active issues ordered by priority, age,
+   and stable identifier.
 3. The authenticated user can open issue details and view confirmation
-   counts.
+   counts and supplied descriptions. A direct detail URL remains
+   readable after an Issue is closed.
 4. The authenticated user can change an `OPEN` issue to `RESOLVED` or
    `INVALID`.
 5. The close operation also appends the corresponding status-history
    record.
+
+**Approved Decisions:**
+
+- Better Auth disables public email sign-up, email sign-in, and
+  username-availability paths while preserving username/password
+  sign-in.
+- The staff dashboard lists only `OPEN` Issues in Version 0.
+- While the `/staff` tab is visible, the dashboard refreshes its Server
+  Component data every 20 seconds. Refreshing pauses while hidden and runs
+  once immediately when the tab becomes visible again, without a full-page
+  reload, scroll reset, dialog interruption, loading flash, or toast.
+- Background refresh also pauses while a confirmation dialog or staff mutation
+  is pending. Attempts do not overlap, temporary failures remain silent, and
+  polling resumes on the next available interval.
+- A closed Issue detail is read-only and exposes no mutation actions.
+- The top-Location summary counts confirmations on open Issues and
+  breaks ties by Finnish Location name and then Location ID.
+- Successful status changes revalidate the dashboard and affected
+  detail path before returning a typed result.
+- Sonner feedback is shown only after confirmed transaction success,
+  followed by navigation to the staff dashboard.
+- Staff logout requires confirmation. A successful Better Auth sign-out
+  returns to the login page and shows one Sonner success message.
+- Cancelled or failed logout keeps the current page and never shows
+  success feedback. Failure remains recoverable in the confirmation
+  dialog.
 
 ### Issue Category Management Flow
 
@@ -179,6 +207,9 @@ only username and password.
   issue can be promoted by the confirmation-count or age rule.
 - Closing an Issue and creating its status-history record must be
   atomic.
+- A staff close transaction conditionally updates only an `OPEN` Issue.
+- An already-closed Issue is not updated and receives no duplicate
+  status-history row.
 - Status history is append-only.
 - Initial history is `fromStatus = null` to `toStatus = OPEN`.
 - Status-history `changeSource` is `SYSTEM` or `STAFF`.
