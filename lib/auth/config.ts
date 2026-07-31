@@ -13,6 +13,12 @@ export const disabledPublicAuthPaths = [
   "/is-username-available",
 ] as const;
 
+export const externalAdminAuthPathPrefix = "/api/auth/admin/";
+
+export function isExternalAdminAuthPath(pathname: string) {
+  return pathname.startsWith(externalAdminAuthPathPrefix);
+}
+
 export const emailAndPasswordPolicy = {
   enabled: true,
   disableSignUp: true,

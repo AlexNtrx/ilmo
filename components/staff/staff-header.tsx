@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, SettingsIcon, UsersIcon } from "lucide-react";
 
 import { LogoutDialog } from "@/components/staff/logout-dialog";
 import { StaffMenu } from "@/components/staff/staff-menu";
@@ -24,6 +24,16 @@ export function StaffHeader({ actor }: { actor: StaffActor }) {
         </Link>
 
         <div className="hidden items-center gap-4 lg:flex">
+          {actor.role === "admin" ? (
+            <nav aria-label="Ylläpito" className="flex items-center gap-1">
+              <Button asChild type="button" variant="ghost" size="lg" className="h-11">
+                <Link href="/staff/admin/categories"><SettingsIcon />Luokat</Link>
+              </Button>
+              <Button asChild type="button" variant="ghost" size="lg" className="h-11">
+                <Link href="/staff/admin/users"><UsersIcon />Käyttäjät</Link>
+              </Button>
+            </nav>
+          ) : null}
           <span className="text-sm font-medium">{actor.name}</span>
           <LogoutDialog
             trigger={
@@ -35,7 +45,7 @@ export function StaffHeader({ actor }: { actor: StaffActor }) {
           />
         </div>
 
-        <StaffMenu name={actor.name} />
+        <StaffMenu name={actor.name} role={actor.role} />
       </div>
     </header>
   );

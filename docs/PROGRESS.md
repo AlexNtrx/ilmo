@@ -5,10 +5,10 @@
 | Field | Actual state |
 | --- | --- |
 | Current phase | Vertical slices — staff workspace |
-| Current work item | VS-02 — Login, dashboard, resolve and invalid |
-| Status | Implemented and approved |
-| Active branch | `feature/vs-02-staff-workspace` |
-| Base commit | `ec9417de49e65aba8868946c8cf724b56b23d4ab` |
+| Current work item | VS-03 — Category and user CRUD |
+| Status | Implementation approved; commit pending |
+| Active branch | `feature/vs-03-category-user-crud` |
+| Base commit | `238092e50ea6bb3df98104268bbc3661b4605f02` |
 | Plan approval | Approved |
 | Implementation approval | Approved |
 | Next authorized work | None |
@@ -17,7 +17,8 @@
 
 - Phases 1–7 and the Phase 4 wireframes are approved.
 - DB-01 through DB-05 are committed.
-- VS-01 is committed as `ec9417d` and integrated into `main`.
+- VS-01 is committed as `ec9417d`; VS-02 is committed as `238092e`.
+  Both are integrated into `main`.
 
 ## Current Implementation
 
@@ -46,6 +47,23 @@
   with semantic tones, pending locks, inline errors, and responsive actions.
 - No Prisma schema, migration, seed, category CRUD, or user CRUD change
   is part of VS-02.
+- `/staff/admin/categories` provides admin-only create, edit, deterministic
+  reorder, activation, deactivation, and race-safe deletion.
+- `/staff/admin/users` provides admin-only create, profile edit, separate role
+  change, password reset/session revocation, and protected deletion.
+- External `/api/auth/admin/*` requests return 404; Ilmo Server Actions pass
+  authenticated request headers to the verified Better Auth Admin APIs.
+
+## VS-03 Validation
+
+- `npm test`: 49 tests passed, including all VS-01 and VS-02 regressions.
+- Authenticated integration verification passed with a temporary `staff` User:
+  username login, scalar session role, `/staff` access, admin-page denial,
+  admin-operation denial, external Admin-plugin GET/POST blocking, and cleanup.
+- Production build and lint pass. Build retains the known Better Auth warnings
+  when URL and secret are unavailable to the build process.
+- Owner verification passed with real admin and staff sessions, including
+  responsive, keyboard, focus, dialog, authorization, and cleanup checks.
 
 ## VS-02 Validation
 
@@ -83,7 +101,8 @@
 | DB-04B | [DB-04B](worklogs/DB-04B.md) | `82ac789` |
 | DB-05 | [DB-05](worklogs/DB-05.md) | `516cf09` |
 | VS-01 | [VS-01](worklogs/VS-01.md) | `ec9417d` |
-| VS-02 | [VS-02](worklogs/VS-02.md) | Not committed |
+| VS-02 | [VS-02](worklogs/VS-02.md) | `238092e` |
+| VS-03 | [VS-03](worklogs/VS-03.md) | Not committed |
 
 ## Blockers and Risks
 
@@ -99,4 +118,4 @@
 
 ## Next Authorized Work
 
-None until VS-02 receives implementation approval and is committed.
+None until VS-03 receives implementation approval and is committed.

@@ -331,6 +331,12 @@ expiry, and timestamps. It maps to the `verification` table and indexes
 - User deletion cascades to Session and Account.
 - User deletion sets attributed history identifiers to null and
   preserves IssueStatusHistory.
+- VS-03 performs profile updates and role changes as separate authenticated
+  Better Auth operations. Every Admin API receives the current request headers.
+- Password reset changes the credential first and then revokes all target-user
+  sessions. Failure of the second operation is reported as a partial failure.
+- Category deletion maps both the friendly reference pre-check and a database
+  foreign-key rejection to the same recoverable referenced-category result.
 
 ## Transaction Rules
 

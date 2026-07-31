@@ -63,3 +63,34 @@ export async function requireStaffPageActor(): Promise<StaffActor> {
 
   return result.actor;
 }
+
+export async function requireAdminPageActor(): Promise<StaffActor> {
+  const actor = await requireStaffPageActor();
+
+  if (actor.role !== "admin") {
+    redirect("/staff/unauthorized");
+  }
+
+  return actor;
+}
+
+export async function getAdminActor(): Promise<
+  | { status: "AUTHENTICATED"; actor: StaffActor & { role: "admin" } }
+  | { status: "SESSION_EXPIRED" }
+  | { status: "UNAUTHORIZED" }
+> {
+  const result = await getStaffActor();
+
+  if (result.status !== "AUTHENTICATED") {
+    return result;
+  }
+
+  if (result.actor.role !== "admin") {
+    return { status: "UNAUTHORIZED" };
+  }
+
+  return {
+    status: "AUTHENTICATED",
+    actor: { ...result.actor, role: "admin" },
+  };
+}

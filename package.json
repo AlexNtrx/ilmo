@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "tsx --test",
+    "test:integration:staff-role": "tsx tests/integration/staff-role.integration.ts",
     "db:seed": "prisma db seed",
     "db:verify": "tsx prisma/verify.ts"
   },

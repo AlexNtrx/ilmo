@@ -133,6 +133,10 @@ Only an admin can:
 A category referenced by an Issue cannot be hard-deleted. It must be
 deactivated when history must be preserved.
 
+Category administration uses deterministic Move Up and Move Down actions.
+The persisted order is normalized to ten-step `sortOrder` values. A friendly
+reference pre-check is followed by database-enforced foreign-key protection.
+
 ### User Management Flow
 
 Only an admin can:
@@ -169,6 +173,17 @@ only username and password.
 - Before deleting or demoting an admin, the server counts admins and
   rejects the operation when only one admin remains.
 - Advanced concurrency protection for the last-admin check is deferred.
+- Profile updates change only username, display username, and name through
+  `adminUpdateUser`. Role changes are separate `setRole` operations.
+- Usernames contain 3–30 ASCII letters, numbers, underscores, or periods.
+  The stored username is lowercase and the submitted form is retained as the
+  display username. Version 0 has no reserved-username list.
+- Names contain 1–100 characters and passwords contain 8–128 characters.
+- Internal email uses an opaque UUID address under `users.ilmo.invalid`.
+- A self-password reset revokes the current session and requires a new login.
+  A revocation failure after password update is reported as a partial failure.
+- External `/api/auth/admin/*` requests are unavailable. Authenticated Ilmo
+  Server Actions own all user-management operations.
 
 ## 6. Approved Business Rules
 
@@ -327,10 +342,11 @@ Derived from the current repository and `package.json`:
 - Zod 4
 - shadcn/ui configuration and VS-01 component sources
 - Locally bundled Inter variable font
+- Sonner 2
 
 #### Approved but Not Yet Installed
 
-- Sonner
+- None
 
 Approved but uninstalled technologies are not currently implemented.
 
@@ -413,7 +429,6 @@ without owner approval:
 
 - Advanced concurrency protection for the last-admin check
 - Temporary-password delivery
-- Final username length, normalization, and reserved-name policy
 - Stronger reporter identity or distributed abuse protection beyond the
   approved cookie-based pilot mechanism
 - Database-enforced one-`OPEN`-issue protection beyond the approved

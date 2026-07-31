@@ -84,13 +84,12 @@ npm run build
 
 Phases 1–6 are approved, the Phase 4 low-fidelity wireframes and screen
 structure are approved, and Phase 7 environment setup is complete.
-Phase 8 database implementation is in progress.
+Phase 8 database implementation is complete.
 
-The root route remains the Create Next App scaffold, while VS-01 now
-implements the Finnish public reporting flow at
-`/report/[publicCode]`. VS-02 adds username/password staff login,
-the protected `/staff` workspace, active-Issue details, and atomic
-resolve/invalid actions. The Prisma schema contains the approved Ilmo
+The root route remains the Create Next App scaffold. VS-01 implements the
+Finnish public reporting flow at `/report/[publicCode]`; VS-02 adds the
+protected staff Issue workspace; and VS-03 implements admin-only
+Category and User management. The Prisma schema contains the approved Ilmo
 domain models, Better Auth models, report-specific confirmation
 descriptions, and the temporary duplicate/rate-limit ledger. The DB-05
 initial migration and the VS-01 reporting migration are applied to the
