@@ -25,6 +25,9 @@ Current repository state:
 - The first admin, six categories, and pilot Location are seeded.
 - A second seed created no records, and full database verification
   passed after both seed runs.
+- VS-01 adds report-specific confirmation descriptions and the
+  temporary ReportSubmission protection ledger through migration
+  `20260731055125_add_public_reporting_support`.
 
 ## DB-01 Prisma Enum Decisions
 
@@ -189,15 +192,33 @@ Approved concepts:
 | --- | --- |
 | `id` | Int autoincrement primary key |
 | Issue relation | Issue being confirmed |
-| `sourceHash` | Pending privacy and implementation design |
+| `description` | Nullable report-specific description up to 200 characters |
+| `sourceHash` | Nullable compatibility field; always null in Version 0 |
 | `createdAt` | Confirmation timestamp |
 
 DB-03 implements required `issueId`, nullable unconstrained
 `sourceHash`, and `createdAt` with a current-timestamp default. The
 Issue relation uses `onDelete: Restrict` and `onUpdate: Cascade`.
 
-No final `sourceHash` algorithm, retention period, expiry behavior, or
-uniqueness rule is approved.
+VS-01 adds nullable `description` as PostgreSQL `VarChar(200)`.
+Descriptions from merged reports are stored on their confirmations
+without overwriting `Issue.description`. Reporter-protection hashes are
+not stored in IssueConfirmation.
+
+## ReportSubmission
+
+VS-01 implements a temporary duplicate and rate-limit ledger:
+
+| Field | Implemented concept |
+| --- | --- |
+| `id` | Int autoincrement primary key |
+| `sourceHash` | HMAC of an opaque HttpOnly reporter cookie |
+| `payloadHash` | HMAC of canonical Location, category IDs, and description |
+| `createdAt` | Submission-attempt timestamp |
+
+The model indexes `(sourceHash, createdAt)` and
+`(sourceHash, payloadHash, createdAt)`. Records older than 24 hours are
+removed by one submission-time `deleteMany`; there is no cleanup job.
 
 ## IssueStatusHistory
 
@@ -321,6 +342,13 @@ expiry, and timestamps. It maps to the `verification` table and indexes
   atomic.
 - A transaction failure must not leave a partial issue creation or
   partial closure.
+- Public reports use a Prisma interactive transaction with PostgreSQL
+  Serializable isolation.
+- Category IDs are processed in sorted order. A recognized Prisma
+  `P2034` conflict retries at most twice, and every attempt re-reads the
+  matching OPEN Issue.
+- VS-01 uses no advisory lock, partial unique index, or permanent
+  reporter hash on confirmations.
 
 ## Data Preservation
 
@@ -337,14 +365,10 @@ expiry, and timestamps. It maps to the `verification` table and indexes
 These details remain genuinely open:
 
 - Advanced concurrency protection for the last-admin check
-- `sourceHash` generation
-- `sourceHash` privacy handling
-- `sourceHash` retention
-- `sourceHash` expiry
-- `sourceHash` uniqueness behavior
-- Rate-limit identity and storage mechanism
-- Prisma representation of the one-`OPEN`-issue invariant
-- Whether PostgreSQL partial unique index SQL is required
+- Stronger reporter identity and abuse protection beyond the temporary
+  browser-cookie ledger
+- A database-enforced one-`OPEN`-issue invariant beyond Serializable
+  transaction retries
 - Final index names
 - Cascade and referential actions
 

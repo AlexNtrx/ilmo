@@ -77,11 +77,22 @@ model Issue {
 }
 
 model IssueConfirmation {
-  id         Int      @id @default(autoincrement())
-  issueId    Int
-  sourceHash String?
-  createdAt  DateTime @default(now())
-  issue      Issue    @relation(fields: [issueId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  id          Int      @id @default(autoincrement())
+  issueId     Int
+  description String?  @db.VarChar(200)
+  sourceHash  String?
+  createdAt   DateTime @default(now())
+  issue       Issue    @relation(fields: [issueId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+}
+
+model ReportSubmission {
+  id          Int      @id @default(autoincrement())
+  sourceHash  String
+  payloadHash String
+  createdAt   DateTime @default(now())
+
+  @@index([sourceHash, createdAt])
+  @@index([sourceHash, payloadHash, createdAt])
 }
 
 model IssueStatusHistory {

@@ -73,6 +73,9 @@ The only application roles are `admin` and `staff`.
 5. The reporter selects one or multiple issue categories.
 6. The reporter supplies a description when a selected category
    requires one.
+   When supplied, the shared description is attached to every selected
+   category. A merge preserves the existing Issue description and
+   stores the new text on the new IssueConfirmation.
 7. The system validates the submission on the server.
 8. Every selected category is processed independently.
 9. The reporter receives one neutral overall success result.
@@ -159,6 +162,8 @@ only username and password.
 - Categories configured as `ALWAYS_CREATE` always create a new Issue.
 - A category can require a description.
 - The Version 0 description maximum is 200 characters.
+- IssueConfirmation preserves the description supplied with each
+  report. A later merged report does not overwrite `Issue.description`.
 
 ### Status and Priority
 
@@ -170,6 +175,8 @@ only username and password.
 - A safety category creates an `URGENT` issue from the first report.
 - An ordinary issue is promoted to `HIGH` at five confirmations or
   after two hours.
+- An `URGENT` issue is never downgraded to `HIGH`. Only a `NORMAL`
+  issue can be promoted by the confirmation-count or age rule.
 - Closing an Issue and creating its status-history record must be
   atomic.
 - Status history is append-only.
@@ -183,8 +190,16 @@ only username and password.
 - Basic duplicate protection is required.
 - Basic rate-limit protection is required.
 
-The approved demo threshold is five submissions per ten minutes. The
-identity, key, storage, and privacy design remain open.
+The approved demo threshold is five submissions per ten minutes.
+Version 0 uses an opaque HttpOnly browser cookie and stores its
+server-secret HMAC only in the temporary ReportSubmission ledger. An
+identical payload within sixty seconds returns the same neutral success
+without another confirmation. Ledger rows older than 24 hours are
+removed opportunistically during submission.
+
+IssueConfirmation does not retain reporter hashes in Version 0.
+Clearing the cookie or changing browsers can bypass this pilot-level
+protection.
 
 ### Issue Categories and Seed Data
 
@@ -278,12 +293,13 @@ Derived from the current repository and `package.json`:
 - Better Auth 1.6.25
 - Better Auth Prisma adapter 1.6.25
 - Better Auth schema generator CLI 1.6.25
+- Zod 4
+- shadcn/ui configuration and VS-01 component sources
+- Locally bundled Inter variable font
 
 #### Approved but Not Yet Installed
 
-- Zod
 - Sonner
-- shadcn/ui components and configuration
 
 Approved but uninstalled technologies are not currently implemented.
 
@@ -367,11 +383,10 @@ without owner approval:
 - Advanced concurrency protection for the last-admin check
 - Temporary-password delivery
 - Final username length, normalization, and reserved-name policy
-- `sourceHash` generation, privacy, retention, expiry, and uniqueness
-- Rate-limit identity, key, storage mechanism, and privacy handling
-- Prisma representation of the one-`OPEN`-issue invariant
-- Whether a PostgreSQL partial unique index and custom migration SQL are
-  required
+- Stronger reporter identity or distributed abuse protection beyond the
+  approved cookie-based pilot mechanism
+- Database-enforced one-`OPEN`-issue protection beyond the approved
+  Serializable transaction and retry behavior
 - Final database index names
 - Referential actions not explicitly approved in the implemented
   schema
