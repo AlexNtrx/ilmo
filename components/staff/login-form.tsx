@@ -13,6 +13,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 
+/** Submits username credentials to the server action and renders typed errors. */
 export function LoginForm() {
   const initialState: StaffLoginActionState = { status: "IDLE" };
   const [state, formAction, pending] = useActionState(

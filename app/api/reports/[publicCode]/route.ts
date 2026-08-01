@@ -17,6 +17,10 @@ type RouteParameters = {
   params: Promise<{ publicCode: string }>;
 };
 
+/**
+ * Accepts a public report, validates it on the server, and delegates all
+ * create-or-merge decisions to the reporting service.
+ */
 export async function POST(
   request: NextRequest,
   { params }: RouteParameters,
@@ -95,6 +99,7 @@ export async function POST(
   }
 }
 
+/** Converts an unreadable request body into the public validation error shape. */
 async function readJsonBody(request: NextRequest) {
   try {
     return await request.json();
@@ -106,6 +111,7 @@ async function readJsonBody(request: NextRequest) {
   }
 }
 
+/** Maps a known reporting error to the HTTP status expected by the public form. */
 function getErrorStatus(error: PublicReportError) {
   switch (error.code) {
     case "INVALID_LOCATION":
@@ -119,6 +125,7 @@ function getErrorStatus(error: PublicReportError) {
   }
 }
 
+/** Adds the opaque reporter cookie only when the request did not supply a valid one. */
 function withReporterCookie(
   response: NextResponse,
   reporterToken: string,

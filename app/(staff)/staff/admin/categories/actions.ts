@@ -16,6 +16,7 @@ import { getAdminActor } from "@/lib/staff/auth";
 
 const categoryService = createCategoryService(prismaCategoryStore);
 
+/** Rechecks admin authorization on the server before a category mutation. */
 async function authorize(): Promise<AdminActionResult | null> {
   const authentication = await getAdminActor();
   if (authentication.status === "SESSION_EXPIRED") {
@@ -33,11 +34,13 @@ async function authorize(): Promise<AdminActionResult | null> {
   return null;
 }
 
+/** Refreshes every view whose content or ordering depends on categories. */
 function refreshCategoryViews() {
   revalidatePath("/staff", "layout");
   revalidatePath("/report/[publicCode]", "page");
 }
 
+/** Validates and creates a staff-owned issue category for an administrator. */
 export async function createCategoryAction(
   input: unknown,
 ): Promise<AdminActionResult> {
@@ -56,6 +59,7 @@ export async function createCategoryAction(
   }
 }
 
+/** Validates and updates the editable behavior of an existing category. */
 export async function updateCategoryAction(
   input: unknown,
 ): Promise<AdminActionResult> {
@@ -78,6 +82,7 @@ export async function updateCategoryAction(
   }
 }
 
+/** Activates or deactivates a category without removing historical references. */
 export async function setCategoryActiveAction(
   input: unknown,
 ): Promise<AdminActionResult> {
@@ -102,6 +107,7 @@ export async function setCategoryActiveAction(
   }
 }
 
+/** Moves a category one position while preserving deterministic ordering. */
 export async function moveCategoryAction(
   input: unknown,
 ): Promise<AdminActionResult> {
@@ -126,6 +132,7 @@ export async function moveCategoryAction(
   }
 }
 
+/** Deletes an unused category and reports referenced categories safely. */
 export async function deleteCategoryAction(
   input: unknown,
 ): Promise<AdminActionResult> {

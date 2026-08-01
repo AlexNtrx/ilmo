@@ -94,6 +94,7 @@ function CategoryFields({
   );
 }
 
+/** Edits one category while keeping server validation and feedback authoritative. */
 function CategoryEditor({ category }: { category: ManagedCategory }) {
   const [draft, setDraft] = useState<CategoryDraft>({
     nameFi: category.nameFi,
@@ -127,6 +128,7 @@ function CategoryEditor({ category }: { category: ManagedCategory }) {
   );
 }
 
+/** Coordinates ordering, activation, editing, and safe deletion for one category. */
 function CategoryRow({
   category,
   first,
@@ -233,6 +235,7 @@ function CategoryRow({
   );
 }
 
+/** Manages category creation and the ordered set used by public reporting. */
 export function CategoryManager({ categories }: { categories: ManagedCategory[] }) {
   const initialDraft: CategoryDraft = {
     nameFi: "",

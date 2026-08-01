@@ -20,6 +20,10 @@ export type NormalizedPublicReportPayload = {
   description: string | null;
 };
 
+/**
+ * Validates untrusted report input and normalizes category order and the
+ * shared description before any database work begins.
+ */
 export function parsePublicReportPayload(
   input: unknown,
 ): NormalizedPublicReportPayload {

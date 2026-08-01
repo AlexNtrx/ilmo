@@ -1,5 +1,6 @@
 import type { SignOutActionResult } from "@/lib/staff/types";
 
+/** Wraps Better Auth sign-out failures in the typed result used by the client dialog. */
 export function createSignOutService({
   signOut,
 }: {

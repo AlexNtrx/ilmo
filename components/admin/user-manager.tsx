@@ -45,6 +45,10 @@ function LabeledInput({ label, ...props }: { label: string } & React.ComponentPr
   );
 }
 
+/**
+ * Keeps profile, role, password, and deletion operations separate for one user.
+ * Typed server results decide feedback and self-session navigation.
+ */
 function UserRow({ user, actorId }: { user: ManagedUser; actorId: string }) {
   const router = useRouter();
   const [profileError, setProfileError] = useState<string | null>(null);
@@ -205,6 +209,7 @@ function UserRow({ user, actorId }: { user: ManagedUser; actorId: string }) {
   );
 }
 
+/** Creates users and presents administrator-only account management controls. */
 export function UserManager({ users, actorId }: { users: ManagedUser[]; actorId: string }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();

@@ -4,6 +4,7 @@ import { buildStaffDashboard } from "@/lib/staff/dashboard";
 import type { StaffActor, StaffDashboard, StaffIssueDetail } from "@/lib/staff/types";
 import { prisma } from "@/lib/prisma";
 
+/** Loads open Issues for an authorized actor and maps them to dashboard data. */
 export async function getStaffDashboard(
   actor: StaffActor,
 ): Promise<StaffDashboard> {
@@ -48,6 +49,7 @@ export async function getStaffDashboard(
   );
 }
 
+/** Loads an Issue by ID regardless of status so closed details remain readable. */
 export async function getStaffIssueDetail(
   actor: StaffActor,
   issueId: number,
@@ -102,6 +104,7 @@ export async function getStaffIssueDetail(
   };
 }
 
+/** Defends the data layer against callers that bypass the page authorization helpers. */
 function assertStaffActor(actor: StaffActor) {
   if (actor.role !== "admin" && actor.role !== "staff") {
     throw new Error("Staff authorization is required.");

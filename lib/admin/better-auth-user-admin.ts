@@ -3,6 +3,10 @@ import "server-only";
 import { auth } from "@/lib/auth";
 import type { AuthenticatedUserAdmin } from "@/lib/admin/user-service";
 
+/**
+ * Adapts Better Auth admin APIs to Ilmo's user service.
+ * Request headers preserve the already-authorized administrator context.
+ */
 export function createBetterAuthUserAdmin(
   requestHeaders: Headers,
 ): AuthenticatedUserAdmin {

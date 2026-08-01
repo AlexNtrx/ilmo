@@ -22,6 +22,7 @@ const priorityRank = {
   NORMAL: 2,
 } as const;
 
+/** Builds deterministic dashboard rows and summary values from open Issue records. */
 export function buildStaffDashboard(
   issues: DashboardIssueRecord[],
 ): StaffDashboard {
@@ -68,6 +69,7 @@ export function buildStaffDashboard(
   };
 }
 
+/** Selects the leading Location with the approved Finnish and ID tie-breakers. */
 export function selectTopLocation(
   locations: Array<{ id: number; nameFi: string; confirmations: number }>,
 ) {

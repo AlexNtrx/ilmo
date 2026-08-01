@@ -18,6 +18,7 @@ type StaffInteractionContextValue = {
 const StaffInteractionContext =
   createContext<StaffInteractionContextValue | null>(null);
 
+/** Coordinates nested interaction locks that temporarily pause dashboard polling. */
 export function StaffInteractionProvider({ children }: { children: ReactNode }) {
   const [pauseCount, setPauseCount] = useState(0);
 
@@ -47,10 +48,12 @@ export function StaffInteractionProvider({ children }: { children: ReactNode }) 
   );
 }
 
+/** Reports whether any mounted staff interaction currently pauses polling. */
 export function useStaffPollingPaused() {
   return useContext(StaffInteractionContext)?.pollingPaused ?? false;
 }
 
+/** Holds a polling pause for the lifetime of an active dialog or mutation. */
 export function useStaffPollingPause(active: boolean) {
   const pausePolling = useContext(StaffInteractionContext)?.pausePolling;
 

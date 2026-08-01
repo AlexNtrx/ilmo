@@ -32,6 +32,10 @@ export type AuthenticatedUserAdmin = {
   removeUser(userId: string): Promise<void>;
 };
 
+/**
+ * Applies Ilmo user-management rules through authenticated auth operations.
+ * Profile, role, password, and deletion changes remain separate operations.
+ */
 export function createUserService({
   store,
   userAdmin,
@@ -88,6 +92,7 @@ export function createUserService({
       if (user.role === input.role) {
         return { status: "SUCCESS" as const };
       }
+      // A pilot must always retain at least one administrator account.
       if (
         user.role === "admin" &&
         input.role === "staff" &&
@@ -110,6 +115,7 @@ export function createUserService({
 
       await userAdmin.setPassword(input.userId, input.password);
       try {
+        // Existing sessions are revoked so the old password cannot keep a session active.
         await userAdmin.revokeSessions(input.userId);
       } catch {
         return { status: "PARTIAL_FAILURE" as const };
@@ -123,6 +129,7 @@ export function createUserService({
       };
     },
     async delete(input: { actorId: string; userId: string }) {
+      // Self-deletion could remove the actor before remaining-admin checks complete.
       if (input.actorId === input.userId) {
         return { status: "SELF_DELETE" as const };
       }

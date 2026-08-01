@@ -10,6 +10,10 @@ type DashboardRefreshController = ReturnType<
   typeof createDashboardRefreshController
 >;
 
+/**
+ * Refreshes Server Component dashboard data while the tab is usable.
+ * Polling pauses during staff interactions and never reloads the document.
+ */
 export function DashboardAutoRefresh({
   refreshToken,
 }: {

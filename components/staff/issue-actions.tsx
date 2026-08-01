@@ -45,6 +45,10 @@ const actionContent: Record<
   },
 };
 
+/**
+ * Runs one OPEN-only status change and shows success only after confirmation.
+ * Failed results stay in the dialog and never produce a success toast.
+ */
 function IssueActionDialog({
   issueId,
   categoryNameFi,
@@ -158,6 +162,7 @@ function IssueActionDialog({
   );
 }
 
+/** Presents the approved resolve and invalid actions for an open issue. */
 export function IssueActions({
   issueId,
   categoryNameFi,

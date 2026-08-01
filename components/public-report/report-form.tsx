@@ -31,6 +31,10 @@ type FieldErrors = {
 
 type ScreenState = "form" | "success" | "invalid" | "inactive";
 
+/**
+ * Collects a public report and submits all selected categories together.
+ * Server responses control validation focus and the neutral result screen.
+ */
 export function ReportForm({
   publicCode,
   location,

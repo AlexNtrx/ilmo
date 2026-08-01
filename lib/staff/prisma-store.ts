@@ -6,6 +6,7 @@ import type {
 } from "@/lib/staff/service";
 import { prisma } from "@/lib/prisma";
 
+/** Adapts the Issue close operations to one Prisma transaction client. */
 function createTransactionAdapter(
   transaction: Prisma.TransactionClient,
 ): StaffIssueTransaction {
@@ -54,6 +55,7 @@ function createTransactionAdapter(
   };
 }
 
+/** Runs status updates and history writes in the same database transaction. */
 export const prismaStaffIssueStore: StaffIssueStore = {
   transaction(operation) {
     return prisma.$transaction((transaction) =>
