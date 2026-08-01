@@ -96,6 +96,10 @@ export type PublicReportServiceDependencies = {
   isSerializationConflict?: (error: unknown) => boolean;
 };
 
+/**
+ * Creates the public reporting workflow. Each attempt runs in a Serializable
+ * transaction so concurrent reports can safely re-read and merge open Issues.
+ */
 export function createPublicReportService({
   store,
   now = () => new Date(),
@@ -124,6 +128,7 @@ export function createPublicReportService({
   };
 }
 
+/** Identifies the Prisma error that is safe for the reporting retry policy. */
 export function isPrismaSerializationConflict(error: unknown) {
   return (
     typeof error === "object" &&
@@ -133,6 +138,10 @@ export function isPrismaSerializationConflict(error: unknown) {
   );
 }
 
+/**
+ * Applies validation, abuse protection, and independent category processing
+ * inside one transaction, returning only the neutral public success shape.
+ */
 async function processPublicReport(
   transaction: ReportingTransaction,
   input: SubmitPublicReportInput,
@@ -195,6 +204,7 @@ async function processPublicReport(
   );
 
   if (duplicate) {
+    // Duplicate submissions stay neutral so the public response reveals no Issue state.
     return { ok: true };
   }
 
@@ -244,6 +254,7 @@ async function processPublicReport(
   return { ok: true };
 }
 
+/** Verifies that every submitted category is active and has its required description. */
 function validateSelectedCategories(
   selectedCategoryIds: number[],
   description: string | null,
@@ -273,6 +284,7 @@ function validateSelectedCategories(
   }
 }
 
+/** Promotes only normal Issues when the approved age or confirmation threshold is met. */
 function getMergedPriority(
   issue: ReportingOpenIssueRecord,
   confirmedAt: Date,

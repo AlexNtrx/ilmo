@@ -15,6 +15,7 @@ export type CategoryStore = {
   isForeignKeyError(error: unknown): boolean;
 };
 
+/** Applies category business rules through an injected persistence boundary. */
 export function createCategoryService(store: CategoryStore) {
   return {
     async create(input: CategoryWriteInput) {
@@ -39,6 +40,7 @@ export function createCategoryService(store: CategoryStore) {
       return { status: await store.move(id, direction) };
     },
     async delete(id: number) {
+      // The pre-check gives friendly feedback; the database constraint still resolves races.
       const issueCount = await store.findIssueCount(id);
       if (issueCount === null) {
         return { status: "NOT_FOUND" as const };

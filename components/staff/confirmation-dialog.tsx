@@ -31,6 +31,10 @@ const iconToneClasses: Record<ConfirmationTone, string> = {
   neutral: "border-border bg-muted text-foreground",
 };
 
+/**
+ * Provides the shared accessible shell for consequential staff actions.
+ * Pending operations lock dismissal and pause background dashboard refreshes.
+ */
 export function ConfirmationDialog({
   open,
   onOpenChange,

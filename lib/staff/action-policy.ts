@@ -3,6 +3,7 @@ import type {
   SignOutActionResult,
 } from "@/lib/staff/types";
 
+/** Returns every staff route whose Server Component data changes after closure. */
 export function getCloseIssueRevalidationPaths(issueId: number) {
   return ["/staff", `/staff/issues/${issueId}`] as const;
 }
@@ -13,6 +14,7 @@ export function isSuccessfulCloseAction(
   return result.status === "SUCCESS";
 }
 
+/** Returns success feedback only for a confirmed Issue-closing result. */
 export function getCloseIssueSuccessMessage(
   result: CloseIssueActionResult,
 ): string | null {
@@ -25,6 +27,7 @@ export function getCloseIssueSuccessMessage(
     : "Ilmoitus on merkitty virheelliseksi.";
 }
 
+/** Returns logout feedback only after Better Auth confirms sign-out. */
 export function getSignOutSuccessMessage(
   result: SignOutActionResult,
 ): string | null {

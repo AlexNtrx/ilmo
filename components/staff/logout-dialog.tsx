@@ -15,6 +15,7 @@ import { signOutStaffAction } from "@/app/(staff)/staff/actions";
 import { ConfirmationDialog } from "@/components/staff/confirmation-dialog";
 import { getSignOutSuccessMessage } from "@/lib/staff/action-policy";
 
+/** Confirms sign-out and reports success only after the server ends the session. */
 export function LogoutDialog({ trigger }: { trigger: ReactElement }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);

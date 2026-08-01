@@ -6,6 +6,7 @@ import type { CategoryDirection } from "@/lib/admin/types";
 import type { UserStore } from "@/lib/admin/user-service";
 import { prisma } from "@/lib/prisma";
 
+/** Persists category changes while keeping their display order deterministic. */
 export const prismaCategoryStore: CategoryStore = {
   async create(input: CategoryWriteInput) {
     const last = await prisma.issueCategory.findFirst({
@@ -31,6 +32,7 @@ export const prismaCategoryStore: CategoryStore = {
     return result.count === 1;
   },
   move(id: number, direction: CategoryDirection) {
+    // Reordering is atomic so readers never observe duplicate or partial positions.
     return prisma.$transaction(async (transaction) => {
       const categories = await transaction.issueCategory.findMany({
         orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
@@ -76,6 +78,7 @@ export const prismaCategoryStore: CategoryStore = {
   },
 };
 
+/** Supplies the minimal user data required by Ilmo's management safeguards. */
 export const prismaUserStore: UserStore = {
   findUser(id) {
     return prisma.user.findUnique({

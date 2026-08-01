@@ -21,6 +21,10 @@ export type PublicReportPageData =
       categories: PublicReportCategory[];
     };
 
+/**
+ * Resolves the public Location state and returns active Categories in their
+ * stable staff-managed order for the reporting page.
+ */
 export async function getPublicReportPageData(
   publicCode: string,
 ): Promise<PublicReportPageData> {

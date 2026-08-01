@@ -13,6 +13,7 @@ import type {
   ReportingTransaction,
 } from "@/lib/reporting/service";
 
+/** Provides reporting queries that all share the caller's Prisma transaction. */
 class PrismaReportingTransaction implements ReportingTransaction {
   constructor(private readonly transaction: Prisma.TransactionClient) {}
 
@@ -108,6 +109,7 @@ class PrismaReportingTransaction implements ReportingTransaction {
   }
 
   async createIssue(input: CreateIssueInput) {
+    // The Issue, first confirmation, and initial history must succeed or fail together.
     await this.transaction.issue.create({
       data: {
         locationId: input.locationId,
@@ -137,6 +139,7 @@ class PrismaReportingTransaction implements ReportingTransaction {
   }
 
   async mergeIssue(input: MergeIssueInput) {
+    // A new confirmation preserves the submitted description without replacing the Issue text.
     await this.transaction.issueConfirmation.create({
       data: {
         issueId: input.issueId,
@@ -156,6 +159,7 @@ class PrismaReportingTransaction implements ReportingTransaction {
   }
 }
 
+/** Runs the complete reporting operation at Serializable isolation. */
 export const prismaReportingStore: ReportingStore = {
   transaction(operation) {
     return prisma.$transaction(

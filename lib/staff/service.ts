@@ -31,6 +31,10 @@ export interface StaffIssueStore {
   ): Promise<T>;
 }
 
+/**
+ * Creates the Issue-closing workflow. The OPEN-only update and append-only
+ * history entry share one transaction so partial closure cannot be stored.
+ */
 export function createCloseIssueService({
   store,
   now = () => new Date(),

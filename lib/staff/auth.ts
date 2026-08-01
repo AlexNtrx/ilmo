@@ -8,6 +8,10 @@ import { prisma } from "@/lib/prisma";
 import { parseStaffRole } from "@/lib/staff/roles";
 import type { StaffActor } from "@/lib/staff/types";
 
+/**
+ * Resolves the current request to a live Ilmo actor. The database role is
+ * re-read so authorization does not trust stale client or session data.
+ */
 export async function getStaffActor(): Promise<
   | { status: "AUTHENTICATED"; actor: StaffActor }
   | { status: "SESSION_EXPIRED" }
@@ -50,6 +54,7 @@ export async function getStaffActor(): Promise<
   };
 }
 
+/** Requires an authenticated admin or staff actor for a protected page. */
 export async function requireStaffPageActor(): Promise<StaffActor> {
   const result = await getStaffActor();
 
@@ -64,6 +69,7 @@ export async function requireStaffPageActor(): Promise<StaffActor> {
   return result.actor;
 }
 
+/** Requires the stronger admin role before rendering an administration page. */
 export async function requireAdminPageActor(): Promise<StaffActor> {
   const actor = await requireStaffPageActor();
 
@@ -74,6 +80,7 @@ export async function requireAdminPageActor(): Promise<StaffActor> {
   return actor;
 }
 
+/** Returns a typed admin authorization result for Server Actions and services. */
 export async function getAdminActor(): Promise<
   | { status: "AUTHENTICATED"; actor: StaffActor & { role: "admin" } }
   | { status: "SESSION_EXPIRED" }

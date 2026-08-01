@@ -14,6 +14,10 @@ export type StaffLoginActionState = {
   };
 };
 
+/**
+ * Validates username/password form data on the server and starts a Better Auth
+ * session. Authentication failures use one neutral Finnish response.
+ */
 export async function signInStaffAction(
   _previousState: StaffLoginActionState,
   formData: FormData,

@@ -27,10 +27,15 @@ const signOutStaff = createSignOutService({
     }),
 });
 
+/** Signs out the current staff session and returns a typed result for the dialog. */
 export async function signOutStaffAction(): Promise<SignOutActionResult> {
   return signOutStaff();
 }
 
+/**
+ * Reauthorizes and validates an Issue status change before invoking the atomic
+ * close service, then revalidates every affected staff view on success.
+ */
 export async function closeIssueAction(
   _previousState: CloseIssueActionResult,
   formData: FormData,

@@ -4,6 +4,7 @@ import type { ManagedCategory, ManagedUser } from "@/lib/admin/types";
 import { parseStaffRole } from "@/lib/staff/roles";
 import { prisma } from "@/lib/prisma";
 
+/** Lists categories in their stable management order with reference counts. */
 export async function listManagedCategories(): Promise<ManagedCategory[]> {
   const categories = await prisma.issueCategory.findMany({
     orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
@@ -24,6 +25,7 @@ export async function listManagedCategories(): Promise<ManagedCategory[]> {
   }));
 }
 
+/** Lists manageable users while narrowing stored roles to Ilmo's scalar roles. */
 export async function listManagedUsers(): Promise<ManagedUser[]> {
   const users = await prisma.user.findMany({
     orderBy: [{ name: "asc" }, { id: "asc" }],

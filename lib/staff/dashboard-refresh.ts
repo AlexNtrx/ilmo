@@ -1,5 +1,9 @@
 export const DASHBOARD_REFRESH_INTERVAL_MS = 20_000;
 
+/**
+ * Coordinates background dashboard refreshes without overlap. Polling pauses
+ * while hidden or during staff interaction and resumes without reloading.
+ */
 export function createDashboardRefreshController<TTimer>({
   refresh,
   isVisible,
