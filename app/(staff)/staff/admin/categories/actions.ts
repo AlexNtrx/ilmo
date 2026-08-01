@@ -90,20 +90,31 @@ export async function setCategoryActiveAction(
   if (authorization) return authorization;
   const parsed = categoryActiveSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Toiminto ei ole kelvollinen." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Toiminto ei ole kelvollinen.",
+    };
   }
   try {
-    const result = await categoryService.setActive(parsed.data.id, parsed.data.isActive);
+    const result = await categoryService.setActive(
+      parsed.data.id,
+      parsed.data.isActive,
+    );
     if (result.status === "NOT_FOUND") {
       return { status: "NOT_FOUND", message: "Luokkaa ei löytynyt." };
     }
     refreshCategoryViews();
     return {
       status: "SUCCESS",
-      message: parsed.data.isActive ? "Luokka on aktivoitu." : "Luokka on poistettu käytöstä.",
+      message: parsed.data.isActive
+        ? "Luokka on aktivoitu."
+        : "Luokka on poistettu käytöstä.",
     };
   } catch {
-    return { status: "SERVER_ERROR", message: "Luokan tilaa ei voitu muuttaa." };
+    return {
+      status: "SERVER_ERROR",
+      message: "Luokan tilaa ei voitu muuttaa.",
+    };
   }
 }
 
@@ -115,10 +126,16 @@ export async function moveCategoryAction(
   if (authorization) return authorization;
   const parsed = categoryMoveSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Siirto ei ole kelvollinen." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Siirto ei ole kelvollinen.",
+    };
   }
   try {
-    const result = await categoryService.move(parsed.data.id, parsed.data.direction);
+    const result = await categoryService.move(
+      parsed.data.id,
+      parsed.data.direction,
+    );
     if (result.status === "NOT_FOUND") {
       return { status: "NOT_FOUND", message: "Luokkaa ei löytynyt." };
     }
@@ -140,7 +157,10 @@ export async function deleteCategoryAction(
   if (authorization) return authorization;
   const parsed = categoryDeleteSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Toiminto ei ole kelvollinen." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Toiminto ei ole kelvollinen.",
+    };
   }
   try {
     const result = await categoryService.delete(parsed.data.id);
@@ -150,7 +170,8 @@ export async function deleteCategoryAction(
     if (result.status === "REFERENCED") {
       return {
         status: "REFERENCED",
-        message: "Luokkaa käytetään ilmoituksissa. Poista se käytöstä tietojen säilyttämiseksi.",
+        message:
+          "Luokkaa käytetään ilmoituksissa. Poista se käytöstä tietojen säilyttämiseksi.",
       };
     }
     refreshCategoryViews();

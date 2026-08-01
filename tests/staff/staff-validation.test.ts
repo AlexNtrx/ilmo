@@ -1,10 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  closeIssueSchema,
-  staffLoginSchema,
-} from "@/lib/staff/validation";
+import { closeIssueSchema, staffLoginSchema } from "@/lib/staff/validation";
 
 test("validates username/password login without accepting email syntax", () => {
   assert.equal(
@@ -38,8 +35,7 @@ test("allows only positive issue IDs and closed target statuses", () => {
     true,
   );
   assert.equal(
-    closeIssueSchema.safeParse({ issueId: "12", targetStatus: "OPEN" })
-      .success,
+    closeIssueSchema.safeParse({ issueId: "12", targetStatus: "OPEN" }).success,
     false,
   );
   assert.equal(

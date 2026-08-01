@@ -163,8 +163,7 @@ class PrismaReportingTransaction implements ReportingTransaction {
 export const prismaReportingStore: ReportingStore = {
   transaction(operation) {
     return prisma.$transaction(
-      (transaction) =>
-        operation(new PrismaReportingTransaction(transaction)),
+      (transaction) => operation(new PrismaReportingTransaction(transaction)),
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
   },

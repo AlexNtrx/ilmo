@@ -74,5 +74,4 @@ export const initialCloseIssueActionResult: CloseIssueActionResult = {
 };
 
 export type SignOutActionResult =
-  | { status: "SUCCESS" }
-  | { status: "SERVER_ERROR"; message: string };
+  { status: "SUCCESS" } | { status: "SERVER_ERROR"; message: string };

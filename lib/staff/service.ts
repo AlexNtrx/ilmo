@@ -1,8 +1,5 @@
 import type { IssueStatus } from "@/generated/prisma/enums";
-import type {
-  CloseIssueResult,
-  CloseIssueTarget,
-} from "@/lib/staff/types";
+import type { CloseIssueResult, CloseIssueTarget } from "@/lib/staff/types";
 
 export type CloseIssueInput = {
   issueId: number;

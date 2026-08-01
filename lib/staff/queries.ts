@@ -1,7 +1,11 @@
 import "server-only";
 
 import { buildStaffDashboard } from "@/lib/staff/dashboard";
-import type { StaffActor, StaffDashboard, StaffIssueDetail } from "@/lib/staff/types";
+import type {
+  StaffActor,
+  StaffDashboard,
+  StaffIssueDetail,
+} from "@/lib/staff/types";
 import { prisma } from "@/lib/prisma";
 
 /** Loads open Issues for an authorized actor and maps them to dashboard data. */

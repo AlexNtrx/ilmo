@@ -160,7 +160,8 @@ async function main() {
 
 main()
   .catch((error: unknown) => {
-    const message = error instanceof Error ? error.message : "Unknown seed error.";
+    const message =
+      error instanceof Error ? error.message : "Unknown seed error.";
     console.error(`Seed failed: ${message}`);
     process.exitCode = 1;
   })

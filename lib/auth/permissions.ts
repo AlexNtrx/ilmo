@@ -13,9 +13,7 @@ export const ilmoPermissionStatements = {
   session: ["revoke"],
 } as const;
 
-export const ilmoAccessControl = createAccessControl(
-  ilmoPermissionStatements,
-);
+export const ilmoAccessControl = createAccessControl(ilmoPermissionStatements);
 
 export const adminRole = ilmoAccessControl.newRole({
   user: [

@@ -1,7 +1,10 @@
 import "server-only";
 
 import { Prisma } from "@/generated/prisma/client";
-import type { CategoryStore, CategoryWriteInput } from "@/lib/admin/category-service";
+import type {
+  CategoryStore,
+  CategoryWriteInput,
+} from "@/lib/admin/category-service";
 import type { CategoryDirection } from "@/lib/admin/types";
 import type { UserStore } from "@/lib/admin/user-service";
 import { prisma } from "@/lib/prisma";

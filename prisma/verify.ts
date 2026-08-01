@@ -67,21 +67,30 @@ async function verifyPreflight() {
   const tables = await readPublicTables();
   const conflicts = tables
     .map(({ name }) => name)
-    .filter((name) => expectedTables.includes(name as (typeof expectedTables)[number]));
+    .filter((name) =>
+      expectedTables.includes(name as (typeof expectedTables)[number]),
+    );
 
   requireCondition(
     conflicts.length === 0,
     `Existing Ilmo or Better Auth tables block the initial migration: ${conflicts.join(", ")}.`,
   );
 
-  console.log("Preflight passed: target database is ilmo and has no conflicting tables.");
+  console.log(
+    "Preflight passed: target database is ilmo and has no conflicting tables.",
+  );
 }
 
 async function verifyTables() {
-  const tableNames = new Set((await readPublicTables()).map(({ name }) => name));
+  const tableNames = new Set(
+    (await readPublicTables()).map(({ name }) => name),
+  );
 
   for (const table of [...expectedTables, "_prisma_migrations"]) {
-    requireCondition(tableNames.has(table), `Expected table is missing: ${table}.`);
+    requireCondition(
+      tableNames.has(table),
+      `Expected table is missing: ${table}.`,
+    );
   }
 }
 
@@ -198,7 +207,10 @@ async function verifyIndexes() {
     "account_userId_idx",
     "verification_identifier_idx",
   ]) {
-    requireCondition(indexNames.has(index), `Expected index is missing: ${index}.`);
+    requireCondition(
+      indexNames.has(index),
+      `Expected index is missing: ${index}.`,
+    );
   }
 }
 
@@ -218,14 +230,7 @@ async function verifySeed() {
     ["WC-paperi on loppu", false, "MERGE_OPEN", false, true, 10],
     ["Saippua on loppu", false, "MERGE_OPEN", false, true, 20],
     ["Tila tarvitsee siivousta", false, "MERGE_OPEN", false, true, 30],
-    [
-      "WC-istuin tai muu varuste on rikki",
-      false,
-      "MERGE_OPEN",
-      true,
-      true,
-      40,
-    ],
+    ["WC-istuin tai muu varuste on rikki", false, "MERGE_OPEN", true, true, 40],
     ["Turvallisuusriski", true, "MERGE_OPEN", true, true, 50],
     ["Muu ongelma", false, "MERGE_OPEN", true, true, 60],
   ];
@@ -246,7 +251,10 @@ async function verifySeed() {
   const locationCount = await prisma.location.count({
     where: { publicCode: "pilot-wc-001" },
   });
-  requireCondition(locationCount === 1, "The pilot Location is missing or duplicated.");
+  requireCondition(
+    locationCount === 1,
+    "The pilot Location is missing or duplicated.",
+  );
 
   const admins = await prisma.user.findMany({
     where: { role: "admin" },
@@ -281,7 +289,9 @@ const preflight = process.argv.includes("--preflight");
 (preflight ? verifyPreflight() : verifyDatabase())
   .catch((error: unknown) => {
     const message =
-      error instanceof Error ? error.message : "Unknown database verification error.";
+      error instanceof Error
+        ? error.message
+        : "Unknown database verification error.";
     console.error(`Database verification failed: ${message}`);
     process.exitCode = 1;
   })

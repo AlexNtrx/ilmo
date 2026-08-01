@@ -53,8 +53,7 @@ export function buildStaffDashboard(
     locationTotals.set(issue.location.id, {
       id: issue.location.id,
       nameFi: issue.location.nameFi,
-      confirmations:
-        (current?.confirmations ?? 0) + issue.confirmationCount,
+      confirmations: (current?.confirmations ?? 0) + issue.confirmationCount,
     });
   }
 

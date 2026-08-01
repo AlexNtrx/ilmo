@@ -106,9 +106,7 @@ class InMemoryReportingStore implements ReportingStore {
       findLocation: async (publicCode) =>
         publicCode === "pilot-wc-001" ? location : null,
       findActiveCategories: async (categoryIds) =>
-        this.categories.filter((category) =>
-          categoryIds.includes(category.id),
-        ),
+        this.categories.filter((category) => categoryIds.includes(category.id)),
       deleteExpiredSubmissions: async (before) => {
         this.state.submissions = this.state.submissions.filter(
           (submission) => submission.createdAt >= before,
@@ -226,10 +224,7 @@ function createSubmission(
 }
 
 test("creates independent issues with shared descriptions and initial history", async () => {
-  const store = new InMemoryReportingStore([
-    requiredCategory,
-    urgentCategory,
-  ]);
+  const store = new InMemoryReportingStore([requiredCategory, urgentCategory]);
 
   const result = await createSubmission(store, [30, 20], {
     description: "Vettä lattialla.",
@@ -269,10 +264,7 @@ test("requires the shared description when any selected category requires it", a
 });
 
 test("merges without overwriting the issue description and promotes only NORMAL", async () => {
-  const store = new InMemoryReportingStore([
-    standardCategory,
-    urgentCategory,
-  ]);
+  const store = new InMemoryReportingStore([standardCategory, urgentCategory]);
   store.state.issues = [
     {
       id: 1,

@@ -13,10 +13,7 @@ export function createDashboardRefreshController<TTimer>({
 }: {
   refresh: () => void;
   isVisible: () => boolean;
-  startInterval: (
-    callback: () => void,
-    delay: number,
-  ) => TTimer;
+  startInterval: (callback: () => void, delay: number) => TTimer;
   stopInterval: (timer: TTimer) => void;
   subscribeVisibility: (callback: () => void) => () => void;
 }) {
@@ -50,10 +47,7 @@ export function createDashboardRefreshController<TTimer>({
   const startTimer = () => {
     stopTimer();
     if (!paused && isVisible()) {
-      timer = startInterval(
-        requestRefresh,
-        DASHBOARD_REFRESH_INTERVAL_MS,
-      );
+      timer = startInterval(requestRefresh, DASHBOARD_REFRESH_INTERVAL_MS);
     }
   };
 

@@ -43,28 +43,41 @@ function refreshUsers() {
   revalidatePath("/staff/admin/users");
 }
 
-export async function createUserAction(input: unknown): Promise<AdminActionResult> {
+export async function createUserAction(
+  input: unknown,
+): Promise<AdminActionResult> {
   const { authentication, service } = await runtime();
   if (!service) return denied(authentication.status);
   const parsed = createUserSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Tarkista käyttäjän tiedot." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Tarkista käyttäjän tiedot.",
+    };
   }
   try {
     await service.create(parsed.data);
     refreshUsers();
     return { status: "SUCCESS", message: "Käyttäjä on luotu." };
   } catch {
-    return { status: "SERVER_ERROR", message: "Käyttäjää ei voitu luoda. Tarkista käyttäjätunnus." };
+    return {
+      status: "SERVER_ERROR",
+      message: "Käyttäjää ei voitu luoda. Tarkista käyttäjätunnus.",
+    };
   }
 }
 
-export async function updateUserProfileAction(input: unknown): Promise<AdminActionResult> {
+export async function updateUserProfileAction(
+  input: unknown,
+): Promise<AdminActionResult> {
   const { authentication, service } = await runtime();
   if (!service) return denied(authentication.status);
   const parsed = updateUserProfileSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Tarkista käyttäjän tiedot." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Tarkista käyttäjän tiedot.",
+    };
   }
   try {
     const result = await service.updateProfile(parsed.data);
@@ -74,16 +87,24 @@ export async function updateUserProfileAction(input: unknown): Promise<AdminActi
     refreshUsers();
     return { status: "SUCCESS", message: "Käyttäjän tiedot on tallennettu." };
   } catch {
-    return { status: "SERVER_ERROR", message: "Käyttäjän tietoja ei voitu tallentaa." };
+    return {
+      status: "SERVER_ERROR",
+      message: "Käyttäjän tietoja ei voitu tallentaa.",
+    };
   }
 }
 
-export async function changeUserRoleAction(input: unknown): Promise<AdminActionResult> {
+export async function changeUserRoleAction(
+  input: unknown,
+): Promise<AdminActionResult> {
   const { authentication, service } = await runtime();
   if (!service) return denied(authentication.status);
   const parsed = changeUserRoleSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Valitse kelvollinen rooli." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Valitse kelvollinen rooli.",
+    };
   }
   try {
     const result = await service.changeRole(parsed.data);
@@ -91,21 +112,32 @@ export async function changeUserRoleAction(input: unknown): Promise<AdminActionR
       return { status: "NOT_FOUND", message: "Käyttäjää ei löytynyt." };
     }
     if (result.status === "LAST_ADMIN") {
-      return { status: "LAST_ADMIN", message: "Viimeisen ylläpitäjän roolia ei voi muuttaa." };
+      return {
+        status: "LAST_ADMIN",
+        message: "Viimeisen ylläpitäjän roolia ei voi muuttaa.",
+      };
     }
     refreshUsers();
     return { status: "SUCCESS", message: "Käyttäjän rooli on päivitetty." };
   } catch {
-    return { status: "SERVER_ERROR", message: "Käyttäjän roolia ei voitu muuttaa." };
+    return {
+      status: "SERVER_ERROR",
+      message: "Käyttäjän roolia ei voitu muuttaa.",
+    };
   }
 }
 
-export async function resetUserPasswordAction(input: unknown): Promise<AdminActionResult> {
+export async function resetUserPasswordAction(
+  input: unknown,
+): Promise<AdminActionResult> {
   const { authentication, service } = await runtime();
   if (!service) return denied(authentication.status);
   const parsed = resetUserPasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Salasanan tulee olla 8–128 merkkiä." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Salasanan tulee olla 8–128 merkkiä.",
+    };
   }
   try {
     const result = await service.resetPassword({
@@ -118,7 +150,8 @@ export async function resetUserPasswordAction(input: unknown): Promise<AdminActi
     if (result.status === "PARTIAL_FAILURE") {
       return {
         status: "PARTIAL_FAILURE",
-        message: "Salasana vaihdettiin, mutta kaikkia istuntoja ei voitu sulkea. Yritä istuntojen sulkemista uudelleen.",
+        message:
+          "Salasana vaihdettiin, mutta kaikkia istuntoja ei voitu sulkea. Yritä istuntojen sulkemista uudelleen.",
       };
     }
     if (result.status === "SELF_SESSION_REVOKED") {
@@ -128,18 +161,26 @@ export async function resetUserPasswordAction(input: unknown): Promise<AdminActi
       };
     }
     refreshUsers();
-    return { status: "SUCCESS", message: "Salasana on vaihdettu ja käyttäjän istunnot on suljettu." };
+    return {
+      status: "SUCCESS",
+      message: "Salasana on vaihdettu ja käyttäjän istunnot on suljettu.",
+    };
   } catch {
     return { status: "SERVER_ERROR", message: "Salasanaa ei voitu vaihtaa." };
   }
 }
 
-export async function deleteUserAction(input: unknown): Promise<AdminActionResult> {
+export async function deleteUserAction(
+  input: unknown,
+): Promise<AdminActionResult> {
   const { authentication, service } = await runtime();
   if (!service) return denied(authentication.status);
   const parsed = deleteUserSchema.safeParse(input);
   if (!parsed.success) {
-    return { status: "VALIDATION_ERROR", message: "Toiminto ei ole kelvollinen." };
+    return {
+      status: "VALIDATION_ERROR",
+      message: "Toiminto ei ole kelvollinen.",
+    };
   }
   try {
     const result = await service.delete({
@@ -147,10 +188,16 @@ export async function deleteUserAction(input: unknown): Promise<AdminActionResul
       ...parsed.data,
     });
     if (result.status === "SELF_DELETE") {
-      return { status: "SELF_DELETE", message: "Et voi poistaa omaa käyttäjätiliäsi." };
+      return {
+        status: "SELF_DELETE",
+        message: "Et voi poistaa omaa käyttäjätiliäsi.",
+      };
     }
     if (result.status === "LAST_ADMIN") {
-      return { status: "LAST_ADMIN", message: "Viimeistä ylläpitäjää ei voi poistaa." };
+      return {
+        status: "LAST_ADMIN",
+        message: "Viimeistä ylläpitäjää ei voi poistaa.",
+      };
     }
     if (result.status === "NOT_FOUND") {
       return { status: "NOT_FOUND", message: "Käyttäjää ei löytynyt." };

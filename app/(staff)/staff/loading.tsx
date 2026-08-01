@@ -3,7 +3,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StaffLoading() {
   return (
-    <div aria-busy="true" aria-label="Ilmoituksia ladataan" className="space-y-8">
+    <div
+      aria-busy="true"
+      aria-label="Ilmoituksia ladataan"
+      className="space-y-8"
+    >
       <div className="space-y-3">
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-10 w-72 max-w-full" />

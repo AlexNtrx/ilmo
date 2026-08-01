@@ -81,10 +81,7 @@ export function createUserService({
       });
       return { status: "SUCCESS" as const };
     },
-    async changeRole(input: {
-      userId: string;
-      role: ManagedRole;
-    }) {
+    async changeRole(input: { userId: string; role: ManagedRole }) {
       const user = await store.findUser(input.userId);
       if (!user) {
         return { status: "NOT_FOUND" as const };

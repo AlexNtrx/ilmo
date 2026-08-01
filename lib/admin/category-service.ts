@@ -9,7 +9,10 @@ export type CategoryStore = {
   create(input: CategoryWriteInput): Promise<void>;
   update(id: number, input: CategoryWriteInput): Promise<boolean>;
   setActive(id: number, isActive: boolean): Promise<boolean>;
-  move(id: number, direction: CategoryDirection): Promise<"MOVED" | "UNCHANGED" | "NOT_FOUND">;
+  move(
+    id: number,
+    direction: CategoryDirection,
+  ): Promise<"MOVED" | "UNCHANGED" | "NOT_FOUND">;
   findIssueCount(id: number): Promise<number | null>;
   delete(id: number): Promise<boolean>;
   isForeignKeyError(error: unknown): boolean;

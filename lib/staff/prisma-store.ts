@@ -35,12 +35,7 @@ function createTransactionAdapter(
       return issue?.status ?? null;
     },
 
-    async createStatusHistory({
-      issueId,
-      targetStatus,
-      actorId,
-      changedAt,
-    }) {
+    async createStatusHistory({ issueId, targetStatus, actorId, changedAt }) {
       await transaction.issueStatusHistory.create({
         data: {
           issueId,

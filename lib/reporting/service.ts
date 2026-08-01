@@ -1,7 +1,4 @@
-import type {
-  IssueMergeMode,
-  IssuePriority,
-} from "@/generated/prisma/enums";
+import type { IssueMergeMode, IssuePriority } from "@/generated/prisma/enums";
 import {
   PublicReportError,
   type PublicReportFieldErrors,
@@ -52,7 +49,9 @@ export type MergeIssueInput = {
 
 export interface ReportingTransaction {
   findLocation(publicCode: string): Promise<ReportingLocationRecord | null>;
-  findActiveCategories(categoryIds: number[]): Promise<ReportingCategoryRecord[]>;
+  findActiveCategories(
+    categoryIds: number[],
+  ): Promise<ReportingCategoryRecord[]>;
   deleteExpiredSubmissions(before: Date): Promise<void>;
   countRecentSubmissions(sourceHash: string, since: Date): Promise<number>;
   hasRecentDuplicate(
@@ -115,8 +114,7 @@ export function createPublicReportService({
         );
       } catch (error) {
         const canRetry =
-          isSerializationConflict(error) &&
-          attempt < MAX_SERIALIZABLE_RETRIES;
+          isSerializationConflict(error) && attempt < MAX_SERIALIZABLE_RETRIES;
 
         if (!canRetry) {
           throw error;
@@ -166,9 +164,8 @@ async function processPublicReport(
     );
   }
 
-  const categories = await transaction.findActiveCategories(
-    selectedCategoryIds,
-  );
+  const categories =
+    await transaction.findActiveCategories(selectedCategoryIds);
   validateSelectedCategories(
     selectedCategoryIds,
     input.payload.description,
@@ -197,11 +194,7 @@ async function processPublicReport(
     new Date(now.getTime() - DUPLICATE_WINDOW_MS),
   );
 
-  await transaction.createSubmission(
-    input.sourceHash,
-    input.payloadHash,
-    now,
-  );
+  await transaction.createSubmission(input.sourceHash, input.payloadHash, now);
 
   if (duplicate) {
     // Duplicate submissions stay neutral so the public response reveals no Issue state.
@@ -271,8 +264,7 @@ function validateSelectedCategories(
     categories.some((category) => category.requiresDescription) &&
     !description
   ) {
-    fieldErrors.description =
-      "Kerro lyhyesti lisätiedot valitusta ongelmasta.";
+    fieldErrors.description = "Kerro lyhyesti lisätiedot valitusta ongelmasta.";
   }
 
   if (fieldErrors.categoryIds || fieldErrors.description) {
