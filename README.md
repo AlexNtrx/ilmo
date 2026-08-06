@@ -1,82 +1,66 @@
 # Ilmo
 
-Ilmo is a QR-based facility issue reporting system for a fictional
-small shopping-centre toilet pilot. Public reporters submit
-location-specific reports without signing in, while authenticated staff
-review and manage active issues.
+Ilmo is a QR-based facility issue reporting system designed for a fictional shopping-centre toilet pilot.
 
-## Version 0 Scope
+Visitors can scan a location-specific QR code and report problems without creating an account. The system matches new reports with existing open issues to reduce duplicates, while authenticated staff can review, manage, resolve, or invalidate reported issues.
 
-- Finnish public reporting through a location QR code
-- One or multiple independently processed issue categories
-- Open-issue matching and confirmation tracking
-- Staff issue review, resolution, invalidation, and category management
-- No push, email, or SMS issue notifications
+## Key Features
 
-## Technology Status
+* QR-based public reporting without sign-in
+* Location-specific issue reports
+* Multiple issue categories in one submission
+* Open-issue matching and confirmation tracking
+* Staff dashboard for issue management
+* Issue resolution and invalidation
+* Category management
+* Finnish-language public reporting flow
 
-The approved stack is Next.js App Router, TypeScript, PostgreSQL, Prisma
-ORM, Tailwind CSS, shadcn/ui, Sonner, Zod, Better Auth, Vercel, and
-hosted PostgreSQL for the later deployed environment.
+## Tech Stack
 
-The repository currently installs Next.js 16.2.12, React 19.2.4,
-TypeScript, Prisma 7.9.1, `pg`, the Prisma PostgreSQL adapter, Tailwind
-CSS 4, dotenv, ESLint, Better Auth 1.6.25, the Better Auth Prisma
-adapter 1.6.25, the Better Auth schema generator CLI 1.6.25, and tsx
-4.23.1. VS-01 also installs Zod 4, shadcn/ui configuration and source
-components, a locally bundled Inter variable font, and Sonner for
-confirmed staff-action feedback.
+* Next.js App Router
+* TypeScript
+* PostgreSQL
+* Prisma ORM
+* Tailwind CSS
+* shadcn/ui
+* Zod
+* Better Auth
+* Sonner
+* Vercel
+
+## Project Scope
+
+Version 0 focuses on the complete reporting and staff-management workflow.
+
+Push notifications, email notifications, and SMS notifications are outside the current scope.
 
 ## Local Development
 
-### Requirements
-
-- Node.js 24 LTS
-- npm
-- Git
-- PostgreSQL
-
-### Installation
-
 ```bash
 npm install
+npx prisma generate
+npm run dev
 ```
 
-### Environment variables
-
-The intended setup uses a tracked `.env.example` as the safe template:
+Create a local environment file from the provided template:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-The tracked `.env.example` contains placeholders for the database and
-Better Auth environment boundary. Replace placeholders only in the
-untracked `.env`; never commit `.env` or expose its values.
-
-### Prisma Client generation
-
-```bash
-npx prisma generate
-```
-
-After the initial migration has been applied, the approved database
-seed and read-only verification commands are:
+After applying the database migration:
 
 ```bash
 npm run db:seed
 npm run db:verify
 ```
 
-### Development
-
-```bash
-npm run dev
-```
-
-### Build
+Build the production version with:
 
 ```bash
 npm run build
 ```
 
+## Status
+
+Version 0 release candidate.
