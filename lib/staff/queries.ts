@@ -5,6 +5,7 @@ import type {
   StaffActor,
   StaffDashboard,
   StaffIssueDetail,
+  StaffIssueHistoryItem,
 } from "@/lib/staff/types";
 import { prisma } from "@/lib/prisma";
 
@@ -106,6 +107,51 @@ export async function getStaffIssueDetail(
     closedAt: issue.closedAt,
     confirmations: issue.confirmations,
   };
+}
+
+/** Loads closed Issues (RESOLVED or INVALID) for an authorized actor, newest first. */
+export async function getStaffIssueHistory(
+  actor: StaffActor,
+): Promise<StaffIssueHistoryItem[]> {
+  assertStaffActor(actor);
+
+  const issues = await prisma.issue.findMany({
+    where: { status: { in: ["RESOLVED", "INVALID"] } },
+    orderBy: [{ closedAt: "desc" }, { id: "desc" }],
+    select: {
+      id: true,
+      priority: true,
+      status: true,
+      firstReportedAt: true,
+      closedAt: true,
+      location: {
+        select: {
+          nameFi: true,
+        },
+      },
+      category: {
+        select: {
+          nameFi: true,
+        },
+      },
+      _count: {
+        select: {
+          confirmations: true,
+        },
+      },
+    },
+  });
+
+  return issues.map((issue) => ({
+    id: issue.id,
+    categoryNameFi: issue.category.nameFi,
+    locationNameFi: issue.location.nameFi,
+    priority: issue.priority,
+    status: issue.status,
+    confirmationCount: issue._count.confirmations,
+    firstReportedAt: issue.firstReportedAt,
+    closedAt: issue.closedAt,
+  }));
 }
 
 /** Defends the data layer against callers that bypass the page authorization helpers. */

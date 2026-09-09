@@ -18,6 +18,10 @@ export type StaffIssueListItem = {
   firstReportedAt: Date;
 };
 
+export type StaffIssueHistoryItem = StaffIssueListItem & {
+  closedAt: Date | null;
+};
+
 export type StaffDashboard = {
   issues: StaffIssueListItem[];
   openCount: number;
