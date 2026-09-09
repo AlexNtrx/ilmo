@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   description: "QR-pohjainen tilojen vikailmoituspalvelu",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +25,7 @@ export default function RootLayout({
     <html lang="fi" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
         {children}
-        <Toaster richColors />
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
