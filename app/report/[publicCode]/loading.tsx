@@ -9,13 +9,14 @@ export default function PublicReportLoading() {
         <Skeleton className="mt-4 h-10 w-4/5" />
         <Skeleton className="mt-3 h-5 w-full max-w-sm" />
         <Skeleton className="mt-2 h-5 w-2/3" />
-        <div className="my-8 h-px bg-border" />
-        <Skeleton className="h-7 w-56" />
-        <Skeleton className="mt-3 h-5 w-72 max-w-full" />
-        <div className="mt-6 grid gap-3">
-          {Array.from({ length: 5 }, (_, index) => (
-            <Skeleton className="h-14 w-full" key={index} />
-          ))}
+        <div className="mt-8 box-border rounded-xl border bg-card p-4 sm:p-6">
+          <Skeleton className="h-7 w-56" />
+          <Skeleton className="mt-3 h-5 w-72 max-w-full" />
+          <div className="mt-6 grid gap-3">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton className="h-14 w-full" key={index} />
+            ))}
+          </div>
         </div>
       </div>
     </ReportShell>

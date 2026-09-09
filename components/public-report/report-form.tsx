@@ -152,9 +152,11 @@ export function ReportForm({
         </p>
       </header>
 
-      <Separator className="my-8" />
-
-      <form className="space-y-8" noValidate onSubmit={handleSubmit}>
+      <form
+        className="mt-8 box-border space-y-8 rounded-xl border bg-card p-4 sm:p-6"
+        noValidate
+        onSubmit={handleSubmit}
+      >
         <FieldSet
           ref={categoryGroupRef}
           aria-describedby={

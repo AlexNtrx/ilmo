@@ -19,18 +19,46 @@ function SummaryItem({
   label,
   value,
   wide = false,
+  metric = false,
+  urgent = false,
 }: {
   label: string;
   value: string | number;
   wide?: boolean;
+  metric?: boolean;
+  urgent?: boolean;
 }) {
   return (
-    <Card className={wide ? "sm:col-span-2 lg:col-span-1" : undefined}>
+    <Card
+      className={
+        urgent
+          ? "border-urgent/30 bg-urgent-surface/65"
+          : wide
+            ? "sm:col-span-2 lg:col-span-1"
+            : undefined
+      }
+    >
       <CardContent className="flex min-h-24 flex-col justify-center gap-1 pt-5">
-        <span className="text-xs font-semibold text-muted-foreground">
+        <span
+          className={
+            urgent
+              ? "text-xs font-semibold text-urgent-foreground/80"
+              : "text-xs font-semibold text-muted-foreground"
+          }
+        >
           {label}
         </span>
-        <strong className="text-xl leading-tight">{value}</strong>
+        <strong
+          className={
+            metric
+              ? urgent
+                ? "text-3xl font-semibold leading-none text-urgent-foreground"
+                : "text-3xl font-semibold leading-none"
+              : "text-xl leading-tight"
+          }
+        >
+          {value}
+        </strong>
       </CardContent>
     </Card>
   );
@@ -43,6 +71,8 @@ export function Dashboard({
   dashboard: StaffDashboard;
   now: Date;
 }) {
+  const hasUrgentIssues = dashboard.urgentCount > 0;
+
   return (
     <div className="space-y-8">
       <div>
@@ -58,9 +88,14 @@ export function Dashboard({
         <h2 id="summary-heading" className="sr-only">
           Yhteenveto
         </h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[11rem_11rem_minmax(16rem,1fr)]">
-          <SummaryItem label="Avoimet" value={dashboard.openCount} />
-          <SummaryItem label="Kiireelliset" value={dashboard.urgentCount} />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr]">
+          <SummaryItem label="Avoimet" value={dashboard.openCount} metric />
+          <SummaryItem
+            label="Kiireelliset"
+            value={dashboard.urgentCount}
+            metric
+            urgent={hasUrgentIssues}
+          />
           <SummaryItem
             label="Eniten ilmoituksia"
             value={dashboard.topLocationNameFi ?? "—"}
@@ -135,7 +170,10 @@ export function Dashboard({
               </TableHeader>
               <TableBody>
                 {dashboard.issues.map((issue) => (
-                  <TableRow key={issue.id}>
+                  <TableRow
+                    key={issue.id}
+                    className="group relative isolate cursor-pointer hover:bg-muted/60 focus-within:bg-muted/60"
+                  >
                     <TableCell>
                       <PriorityBadge priority={issue.priority} />
                     </TableCell>
@@ -153,7 +191,15 @@ export function Dashboard({
                     <TableCell className="text-right">
                       <Link
                         href={`/staff/issues/${issue.id}`}
-                        className="inline-flex min-h-11 items-center gap-1 rounded-md px-3 font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                        className="absolute inset-0 z-10 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset"
+                      >
+                        <span className="sr-only">
+                          {issue.locationNameFi}: {issue.categoryNameFi}
+                        </span>
+                      </Link>
+                      <Link
+                        href={`/staff/issues/${issue.id}`}
+                        className="relative z-20 inline-flex min-h-10 items-center gap-1 rounded-md border border-border/70 bg-muted/30 px-2.5 text-sm font-semibold text-primary outline-none hover:bg-accent/55 active:bg-accent/80 focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         Avaa
                         <ArrowRightIcon aria-hidden="true" className="size-4" />
