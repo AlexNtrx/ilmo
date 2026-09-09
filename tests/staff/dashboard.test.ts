@@ -11,7 +11,6 @@ function issue(
   overrides: Partial<DashboardIssueRecord> & Pick<DashboardIssueRecord, "id">,
 ): DashboardIssueRecord {
   return {
-    id: overrides.id,
     priority: "NORMAL",
     status: "OPEN",
     firstReportedAt: new Date("2026-07-31T08:00:00.000Z"),
