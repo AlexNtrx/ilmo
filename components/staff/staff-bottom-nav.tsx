@@ -41,7 +41,7 @@ export function StaffBottomNav({ actor }: { actor: StaffActor }) {
     <>
       <nav
         aria-label="Mobiilinavigaatio"
-        className="fixed bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="shrink-0 z-40 border-t bg-card/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <div className="mx-auto flex h-16 max-w-md items-center justify-around px-4">
           {/* Tab 1: Ilmoitukset */}

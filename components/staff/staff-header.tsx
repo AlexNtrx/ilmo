@@ -7,7 +7,7 @@ import type { StaffActor } from "@/lib/staff/types";
 
 export function StaffHeader({ actor }: { actor: StaffActor }) {
   return (
-    <header className="border-b bg-card">
+    <header className="shrink-0 border-b bg-card">
       <div className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/staff"
